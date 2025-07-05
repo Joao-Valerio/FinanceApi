@@ -46,20 +46,22 @@ export function Welcome() {
           </Link>
         </div>
 
-        <div className="flex flex-row justify-between mt-8 py-20">
-          <div className="flex items-center gap-5">
-            <FontAwesomeIcon icon={faCoins} className="text-green-500" />
-            <span className="text-2xl">Controle de gastos</span>
-          </div>
-          <div className="flex items-center gap-5">
-            <FontAwesomeIcon icon={faChartLine} className="text-green-500" />
-            <span className="text-2xl">Análise de metas</span>
-          </div>
-          <div className="flex items-center gap-5">
-            <FontAwesomeIcon icon={faSquarePollVertical} className="text-green-500" />
-            <span className="text-2xl">Relatórios automáticos</span>
-          </div>
-        </div>
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-20 py-20 px-8 bg-gray-100 dark:bg-gray-900 rounded-2xl shadow-lg">
+  <div className="flex flex-col items-center text-center gap-4">
+    <FontAwesomeIcon icon={faCoins} className="text-green-500 text-7xl drop-shadow-md" />
+    <span className="text-4xl font-semibold text-gray-900 dark:text-white">Controle de gastos</span>
+  </div>
+
+  <div className="flex flex-col items-center text-center gap-4">
+    <FontAwesomeIcon icon={faChartLine} className="text-green-500 text-7xl drop-shadow-md" />
+    <span className="text-4xl font-semibold text-gray-900 dark:text-white">Análise de metas</span>
+  </div>
+
+  <div className="flex flex-col items-center text-center gap-4">
+    <FontAwesomeIcon icon={faSquarePollVertical} className="text-green-500 text-7xl drop-shadow-md" />
+    <span className="text-4xl font-semibold text-gray-900 dark:text-white">Relatórios automáticos</span>
+  </div>
+</div>
       </main>
     </>
   );
