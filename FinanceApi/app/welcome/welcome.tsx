@@ -39,7 +39,7 @@ export function Welcome() {
 
         <div className="text-4xl">
           <Link
-            to="/"
+            to="/login"
             className="inline-block px-6 py-3 bg-green-500 text-white border-2 border-green-500 rounded-full hover:bg-transparent hover:text-green-500 transition"
           >
             Comece agora
