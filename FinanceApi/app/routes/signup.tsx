@@ -1,4 +1,4 @@
-import SignUp from "../signup/signup";
+import SignUp from "../components/signup/signup";
 
 export function meta() {
   return [
