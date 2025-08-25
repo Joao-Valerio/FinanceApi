@@ -6,7 +6,7 @@ export function Welcome() {
   console.log("🏠 Home carregada");
   return (
     <>
-      <div className="flex flex-row justify-between items-center px-8 py-6 bg-gray-900">
+      <div className="flex flex-row justify-between items-center px-8 py-6 dark:bg-gray-900">
         <Link
           to="/"
           className="px-6 py-3 text-lg font-semibold text-green-600 border-2 border-green-600 rounded-full hover:bg-green-600 hover:text-white transition"
@@ -30,8 +30,8 @@ export function Welcome() {
         </div>
       </div>
 
-      <main className="px-12 py-12 bg-gray-900">
-        <h1 className="text-8xl text-white">Assuma o controle <br /> de suas finanças</h1>
+      <main className="px-12 py-12 dark:bg-gray-900">
+        <h1 className="text-8xl dark:text-white">Assuma o controle <br /> de suas finanças</h1>
         <p className="text-4xl text-gray-700 py-12">
           Visualize, planeje e alcance seus objetivos <br />
           financeiros de forma simples e rápida
@@ -46,20 +46,20 @@ export function Welcome() {
           </Link>
         </div>
 
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-20 py-20 px-8 bg-gray-100 dark:bg-gray-900 rounded-2xl shadow-lg bg-gray-800">
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-20 py-20 px-8 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg">
   <div className="flex flex-col items-center text-center gap-4">
     <FontAwesomeIcon icon={faCoins} className="text-green-500 text-7xl drop-shadow-md" />
-    <span className="text-4xl font-semibold text-gray-900 text-white">Controle de gastos</span>
+    <span className="text-4xl font-semibold text-gray-900 dark:text-white">Controle de gastos</span>
   </div>
 
   <div className="flex flex-col items-center text-center gap-4">
     <FontAwesomeIcon icon={faChartLine} className="text-green-500 text-7xl drop-shadow-md" />
-    <span className="text-4xl font-semibold text-gray-900 text-white">Análise de metas</span>
+    <span className="text-4xl font-semibold text-gray-900 dark:text-white">Análise de metas</span>
   </div>
 
   <div className="flex flex-col items-center text-center gap-4">
     <FontAwesomeIcon icon={faSquarePollVertical} className="text-green-500 text-7xl drop-shadow-md" />
-    <span className="text-4xl font-semibold text-gray-900 text-white">Relatórios automáticos</span>
+    <span className="text-4xl font-semibold text-gray-900 dark:text-white">Relatórios automáticos</span>
   </div>
 </div>
       </main>

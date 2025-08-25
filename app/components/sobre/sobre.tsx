@@ -12,7 +12,7 @@ export const Sobre = () => {
       {/* Botão sidebar */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="m-4 p-2 text-3xl text-white rounded hover:bg-green-700 transition bg-gray-900"
+        className="m-4 p-2 text-3xl text-balck rounded hover:bg-green-700 transition dark:text-white "
       >
         ☰
       </button>

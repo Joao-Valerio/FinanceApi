@@ -8,7 +8,7 @@ const SignUp = () => {
     navigate("/dashboard");
   }
   return (
-    <div className="bg-gray-900">
+    <div className="dark:bg-gray-900">
       <div className="flex flex-row justify-between items-center px-8 py-6 ">
         <Link
           to="/"
@@ -25,33 +25,33 @@ const SignUp = () => {
         </Link>
       </div>
 
-<main className="p-8 bg-gray-900">
-  <h1 className="text-5xl font-bold text-center text-white">Sing Up</h1>
+<main className="p-8 dark:bg-gray-900">
+  <h1 className="text-5xl font-bold text-center dark:text-white">Sing Up</h1>
 
-<div className="bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-md mx-auto mt-4 ">
+<div className="dark:bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-md mx-auto mt-4 ">
   <input
     type="string"
     placeholder="Nome"
-    className="w-full mb-4 px-4 py-3 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+    className="w-full mb-4 px-4 py-3 rounded-md bg-gray-100 dark:bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
   />
 
   <input
     type="email"
     placeholder="Email"
-    className="w-full mb-4 px-4 py-3 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+    className="w-full mb-4 px-4 py-3 rounded-md bg-gray-100 dark:bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
   />
 
     <input
     type="password"
     placeholder="Senha"
-    className="w-full mb-6 px-4 py-3 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+    className="w-full mb-6 px-4 py-3 rounded-md bg-gray-100 dark:bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
   />
 
   <button onClick={handleSignUp} className="w-full bg-green-500 border-green-500 text-white font-semibold py-3 rounded-md duration-300 hover:bg-white hover:text-green-600   transition">
     Entrar
   </button>
 
-  <Link to="/login" className="block text-center text-sm text-gray-400 hover:text-white mt-4">
+  <Link to="/login" className="block text-center text-sm text-black hover:text-gray-500 mt-4 dark:text-gray-400 dark:hover:text-white">
     Já tem uma conta?Login
   </Link>
 </div>
