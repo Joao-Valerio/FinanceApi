@@ -10,7 +10,7 @@ export function Login() {
     navigate("/dashboard");
   }
   return (
-    <div className="dark:bg-gray-900">
+    <div className="min-h-screen dark:bg-gray-900">
       <div className="flex flex-row justify-between items-center px-8 py-6 ">
         <Link
           to="/"
