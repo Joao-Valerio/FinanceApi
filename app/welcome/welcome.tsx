@@ -46,7 +46,7 @@ export function Welcome() {
           </Link>
         </div>
 
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-20 py-20 px-8 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg">
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-20 py-20 px-8 bg-gray-50 dark:bg-gray-700 rounded-2xl shadow-lg">
   <div className="flex flex-col items-center text-center gap-4">
     <FontAwesomeIcon icon={faCoins} className="text-green-500 text-7xl drop-shadow-md" />
     <span className="text-4xl font-semibold text-gray-900 dark:text-white">Controle de gastos</span>
