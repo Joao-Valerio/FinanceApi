@@ -7,12 +7,12 @@ export const Sobre = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen bg-gray-900">
+    <div className="relative min-h-screen dark:bg-gray-900">
 
       {/* Botão sidebar */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="m-4 p-2 text-3xl text-white rounded hover:bg-green-700 transition"
+        className="m-4 p-2 text-3xl text-black dark:text-white rounded hover:bg-green-700 transition"
       >
         ☰
       </button>
@@ -27,7 +27,7 @@ export const Sobre = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white p-6 shadow-lg transform transition-transform duration-300 z-20 ${
+        className={`fixed top-0 left-0 h-full w-64 bg-gray-400 dark:bg-gray-800 text-black dark:text-white p-6 shadow-lg transform transition-transform duration-300 z-20 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

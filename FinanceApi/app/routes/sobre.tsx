@@ -1,4 +1,4 @@
-import Sobre from "../components/sobre/sobre";
+import Sobre from "../Components/sobre/sobre";
 
 export function meta() {
   return [

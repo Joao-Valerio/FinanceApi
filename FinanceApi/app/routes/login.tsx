@@ -1,4 +1,4 @@
-import { Login } from "../components/login/login";
+import { Login } from "../Components/login/login";
 
 export function meta() {
   return [

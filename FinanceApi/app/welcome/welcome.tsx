@@ -6,7 +6,7 @@ export function Welcome() {
   console.log("🏠 Home carregada");
   return (
     <>
-      <div className="flex flex-row justify-between items-center px-8 py-6 shadow-md">
+      <div className="flex flex-row justify-between items-center px-8 py-6">
         <Link
           to="/"
           className="px-6 py-3 text-lg font-semibold text-green-600 border-2 border-green-600 rounded-full hover:bg-green-600 hover:text-white transition"
