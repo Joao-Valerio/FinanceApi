@@ -12,11 +12,7 @@ export const Sobre = () => {
       {/* Botão sidebar */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
-<<<<<<< HEAD:FinanceApi/app/components/sobre/sobre.tsx
-        className="m-4 p-2 text-3xl text-black dark:text-white rounded hover:bg-green-700 transition"
-=======
         className="m-4 p-2 text-3xl text-balck rounded hover:bg-green-700 transition dark:text-white "
->>>>>>> bf5597c5a60cb934a637808e5c30cbd5212414f7:app/components/sobre/sobre.tsx
       >
         ☰
       </button>

@@ -6,11 +6,7 @@ export function Welcome() {
   console.log("🏠 Home carregada");
   return (
     <>
-<<<<<<< HEAD:FinanceApi/app/welcome/welcome.tsx
-      <div className="flex flex-row justify-between items-center px-8 py-6">
-=======
       <div className="flex flex-row justify-between items-center px-8 py-6 dark:bg-gray-900">
->>>>>>> bf5597c5a60cb934a637808e5c30cbd5212414f7:app/welcome/welcome.tsx
         <Link
           to="/"
           className="px-6 py-3 text-lg font-semibold text-green-600 border-2 border-green-600 rounded-full hover:bg-green-600 hover:text-white transition"
