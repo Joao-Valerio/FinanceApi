@@ -293,12 +293,12 @@ export const Dashboard = () => {
         <h2 className="text-4xl font-bold mb-6">Painel</h2>
         <ul className="space-y-4">
             <li><Link to="/dashboard" className="hover:text-green-400 font-semibold">Dashboard</Link></li>
-            <li><Link to="#" className="hover:text-green-400 font-semibold">Gastos</Link></li>
-            <li><Link to="#" className="hover:text-green-400 font-semibold">Metas</Link></li>
-            <li><Link to="#" className="hover:text-green-400 font-semibold">Relatórios</Link></li>
-            <li><Link to="#" className="hover:text-green-400 font-semibold">Recursos</Link></li>
+            <li><Link to="/gastos" className="hover:text-green-400 font-semibold">Gastos</Link></li>
+            <li><Link to="/metas" className="hover:text-green-400 font-semibold">Metas</Link></li>
+            <li><Link to="/relatorios" className="hover:text-green-400 font-semibold">Relatórios</Link></li>
+            <li><Link to="/recursos" className="hover:text-green-400 font-semibold">Recursos</Link></li>
             <li><Link to="/sobre" className="hover:text-green-400 font-semibold">Sobre</Link></li>
-            <li><Link to="#" className="hover:text-green-400 font-semibold">Contato</Link></li>
+            <li><Link to="/contato" className="hover:text-green-400 font-semibold">Contato</Link></li>
             <li><Link to="/" className="hover:text-red-700 font-semibold">Sair</Link></li>
 
         </ul>
