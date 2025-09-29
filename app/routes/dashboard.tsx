@@ -1,4 +1,4 @@
-import Dashboard from "../Components/dashboard/dashboard";
+import Dashboard from "../components/dashboard/dashboard";
 
 export function meta() {
   return [
