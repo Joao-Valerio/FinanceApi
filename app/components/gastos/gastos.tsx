@@ -48,11 +48,11 @@ export function ChartLineGastosCliente() {
   const saldo = 1250; // exemplo de saldo do cliente
 
   return (
-    <Card className="py-4 sm:py-0">
+    <Card className="py-4 sstext-black dark:bg-gray-800 dark:text-white p-4 bg-gray-200">
       {/* Saldo pequeno em cima do gráfico */}
       <div className="px-6 mb-2">
-        <span className="text-xs text-muted-foreground">Saldo atual</span>
-        <p className="text-sm font-semibold">R$ {saldo.toLocaleString()}</p>
+        <span className="text-4xl font-bold ">Saldo atual</span>
+        <p className="text-3xl font-semibold text-green-400 mt-2">R$ {saldo.toLocaleString()}</p>
       </div>
 
       <CardHeader className="flex flex-col items-stretch border-b !p-0 sm:flex-row">
@@ -117,7 +117,7 @@ export function ChartLineGastosCliente() {
             <Line
               dataKey="gastos"
               type="monotone"
-              stroke={`var(--color-gastos)`}
+              stroke={`#22c55e`}
               strokeWidth={2}
               dot={false}
             />
@@ -180,8 +180,8 @@ const Gastos = () => {
         </div>
       </div>
 
-<div className="relative gap-8">
-  <main className="mt-4 px-4 sm:px-20">
+<div className="relative gap-8 ">
+  <main className="mt-4 px-4 sm:px-20 ">
     <ChartLineGastosCliente />
   </main>
 </div>
