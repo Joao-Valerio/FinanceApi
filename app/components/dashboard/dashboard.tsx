@@ -317,17 +317,17 @@ export const Dashboard = () => {
 
       </div>
 
-<main className="p-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-white">
+<main className="p-8 sm:p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-white ">
   {/* 💰 Saldo do usuário */}
   <section className="text-black dark:bg-gray-800 dark:text-white p-4 bg-gray-200 rounded-2xl  shadow-md md:col-span-1 flex flex-col justify-center">
-    <h3 className="text-6xl font-bold mb-1 ">Saldo Atual</h3>
-    <p className="text-4xl font-semibold text-green-400">R$ 3.250,00</p>
+    <h3 className="md:text-6xl sm:text-4xl font-bold mb-1 ">Saldo Atual</h3>
+    <p className="sm:text-3xl md:text-4xl font-semibold text-green-400">R$ 3.250,00</p>
   </section>
 
   {/* ➕ Adicionar transação */}
   <section className="text-black dark:bg-gray-800 dark:text-white bg-gray-200 p-6 rounded-2xl shadow-md md:col-span-2">
     <h3 className="text-xl font-bold mb-4">Adicionar Transação</h3>
-    <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <form className="flex flex-col md:grid md:grid-cols-2 gap-4">
       <input
         type="text"
         placeholder="Descrição"
