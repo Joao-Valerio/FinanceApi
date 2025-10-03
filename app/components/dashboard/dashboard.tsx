@@ -319,9 +319,9 @@ export const Dashboard = () => {
 
 <main className="p-8 sm:p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-white ">
   {/* 💰 Saldo do usuário */}
-  <section className="text-black dark:bg-gray-800 dark:text-white p-4 bg-gray-200 rounded-2xl  shadow-md md:col-span-1 flex flex-col justify-center">
-    <h3 className="md:text-6xl sm:text-4xl font-bold mb-1 ">Saldo Atual</h3>
-    <p className="sm:text-3xl md:text-4xl font-semibold text-green-400">R$ 3.250,00</p>
+  <section className="text-black dark:bg-gray-800 dark:text-white p-4 bg-gray-200 rounded-2xl  shadow-md md:col-span-1 flex flex-col justify-center min-h-[180px] sm:min-h-[220px]">
+    <h3 className=" text-5xl md:text-6xl sm:text-4xl font-bold mb-1 ">Saldo Atual</h3>
+    <p className="text-4xl sm:text-3xl md:text-5xl font-semibold text-green-400">R$ 3.250,00</p>
   </section>
 
   {/* ➕ Adicionar transação */}
