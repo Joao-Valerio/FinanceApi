@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { useState } from "react";
+import { useEffect , useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 import type { ChartConfig } from "../ui/chart"
 
@@ -134,18 +134,33 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return isMobile;
+}
+
 function ChartAreaInteractive() {
+  const isMobile = useIsMobile();
   const [timeRange, setTimeRange] = useState("90d");
 
   const filteredData = chartData.filter((item) => {
     const date = new Date(item.date);
     const referenceDate = new Date("2024-06-30");
-    let daysToSubtract = 90;
 
-    if (timeRange === "30d") {
-      daysToSubtract = 30;
-    } else if (timeRange === "7d") {
-      daysToSubtract = 7;
+    let daysToSubtract = 90;
+    if (timeRange === "30d") daysToSubtract = 30;
+    if (timeRange === "7d") daysToSubtract = 7;
+
+    // 👇 aqui você decide o comportamento mobile
+    if (isMobile) {
+      daysToSubtract = Math.floor(daysToSubtract / 2);
     }
 
     const startDate = new Date(referenceDate);
@@ -154,13 +169,21 @@ function ChartAreaInteractive() {
     return date >= startDate;
   });
 
+
+
+const timeRangeLabels: Record<string, string> = {
+  "90d": "Últimos 3 meses",
+  "30d": "Últimos 30 dias",
+  "7d": "Últimos 7 dias",
+};
+
   return (
     <Card className="pt-0">
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1">
           <CardTitle>Area Chart - Interactive</CardTitle>
           <CardDescription>
-            Mostrando visitantes dos últimos 3 meses
+            Gastos e Recebimentos dos {timeRangeLabels[timeRange]}
           </CardDescription>
         </div>
         <Select value={timeRange} onValueChange={setTimeRange}>
@@ -188,7 +211,7 @@ function ChartAreaInteractive() {
           config={chartConfig}
           className="aspect-auto h-[320px] w-full sm:h-[250px]"
         >
-          <AreaChart data={filteredData} width={600} height={300}>
+          <AreaChart data={filteredData} height={250} className="w-full">
             <defs>
 <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
   <stop
@@ -222,6 +245,7 @@ function ChartAreaInteractive() {
               axisLine={false}
               tickMargin={8}
               minTickGap={20}
+              interval="preserveStartEnd"
               tickFormatter={(value) => {
                 const date = new Date(value);
                 return date.toLocaleDateString("pt-BR", { month: "short", day: "numeric" });
