@@ -186,9 +186,9 @@ function ChartAreaInteractive() {
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-[320px] w-full sm:h-[250px]"
         >
-          <AreaChart data={filteredData}>
+          <AreaChart data={filteredData} width={600} height={300}>
             <defs>
 <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
   <stop
@@ -221,7 +221,7 @@ function ChartAreaInteractive() {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              minTickGap={32}
+              minTickGap={20}
               tickFormatter={(value) => {
                 const date = new Date(value);
                 return date.toLocaleDateString("pt-BR", { month: "short", day: "numeric" });
@@ -231,6 +231,7 @@ function ChartAreaInteractive() {
               cursor={false}
               content={
                 <ChartTooltipContent
+                  className="max-w-[120px] text-xs sm:max-w-[200px] sm:text-sm"
                   labelFormatter={(value) => {
                     return new Date(value).toLocaleDateString("pt-BR", {
                       month: "short",
