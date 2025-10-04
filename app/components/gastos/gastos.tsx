@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router';
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 import type { ChartConfig } from "../ui/chart";
+import type { ColumnDef } from "@tanstack/react-table";
 
 import {
   Card,
@@ -15,6 +16,124 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "../ui/chart";
+
+import {
+  useReactTable,
+  getCoreRowModel,
+  flexRender,
+  createColumnHelper,
+} from "@tanstack/react-table";
+
+type Gasto = {
+  descricao: string;
+  valor: number;
+  data: string; 
+  categoria: string;
+};
+
+// Exemplo de dados
+const dados: Gasto[] = [
+  {
+    descricao: "Conta de luz",
+    valor: 150.75,
+    data: "2024-09-01",
+    categoria: "Serviços",
+  },
+  {
+    descricao: "Supermercado",
+    valor: 230.10,
+    data: "2024-09-05",
+    categoria: "Alimentação",
+  },
+  {
+    descricao: "Assinatura streaming",
+    valor: 29.90,
+    data: "2024-09-10",
+    categoria: "Entretenimento",
+  },
+];
+
+const columnHelper = createColumnHelper<Gasto>();
+
+const columns: ColumnDef<Gasto, any>[] = [
+  columnHelper.accessor("descricao", {
+    header: "Descrição",
+    cell: (info) => info.getValue(),
+  }),
+  columnHelper.accessor("valor", {
+    header: "Valor",
+    cell: (info) => {
+      const val = info.getValue();
+      return <span>R$ {val.toFixed(2)}</span>;
+    },
+  }),
+  columnHelper.accessor("data", {
+    header: "Data",
+    cell: (info) => {
+      const d = new Date(info.getValue());
+      return d.toLocaleDateString("pt-BR");
+    },
+  }),
+  columnHelper.accessor("categoria", {
+    header: "Categoria",
+    cell: (info) => info.getValue(),
+  }),
+];
+
+export function TabelaGastos() {
+  const table = useReactTable({
+    data: dados,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
+  return (
+    <div className="overflow-x-auto rounded-lg border border-gray-300 dark:border-gray-700 p-4 bg-gray-200 dark:bg-gray-800 mt-12">
+      <table className="min-w-full border-collapse border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden ">
+        <thead className="bg-green-600 dark:bg-green-900">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th
+                  key={header.id}
+                  className="border border-gray-300 dark:border-gray-700 px-4 py-2 text-left text-gray-800 dark:text-green-200"
+                >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr
+              key={row.id}
+              className="even:bg-gray-50 odd:bg-white hover:bg-green-200 dark:even:bg-gray-800 dark:odd:bg-gray-700 dark:hover:bg-green-900"
+            >
+              {row.getVisibleCells().map((cell) => (
+                <td
+                  key={cell.id}
+                  className="border border-gray-300 dark:border-gray-700 px-4 py-2 text-gray-800 dark:text-green-200"
+                >
+                  {flexRender(
+                    cell.column.columnDef.cell,
+                    cell.getContext()
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 
 export const description = "Gráfico de gastos do cliente";
 
@@ -45,11 +164,10 @@ export function ChartLineGastosCliente() {
     []
   );
 
-  const saldo = 1250; // exemplo de saldo do cliente
+  const saldo = 1250; 
 
   return (
     <Card className="py-4 sstext-black dark:bg-gray-800 dark:text-white p-4 bg-gray-200">
-      {/* Saldo pequeno em cima do gráfico */}
       <div className="px-6 mb-2">
         <span className="text-4xl font-bold ">Saldo atual</span>
         <p className="text-3xl font-semibold text-green-400 mt-2">R$ {saldo.toLocaleString()}</p>
@@ -183,6 +301,7 @@ const Gastos = () => {
 <div className="relative gap-8 ">
   <main className="mt-4 px-4 sm:px-20 ">
     <ChartLineGastosCliente />
+    <TabelaGastos />
   </main>
 </div>
 
