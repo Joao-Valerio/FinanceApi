@@ -88,15 +88,15 @@ export function TabelaGastos() {
   });
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-300 dark:border-gray-700 p-4 bg-gray-200 dark:bg-gray-800 mt-12">
-      <table className="min-w-full border-collapse border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden ">
+    <div className="mt-8 w-full overflow-x-auto rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-200 dark:bg-gray-800 p-2 sm:p-4">
+      <table className="min-w-full border-collapse border border-gray-300 dark:border-gray-700 rounded-lg text-sm sm:text-base ">
         <thead className="bg-green-600 dark:bg-green-900">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className="border border-gray-300 dark:border-gray-700 px-4 py-2 text-left text-gray-800 dark:text-green-200"
+                  className="border border-gray-300 dark:border-gray-700 px-2 py-2 sm:px-4 sm:py-3 text-left text-gray-800 dark:text-green-200 text-xs sm:text-sm"
                 >
                   {header.isPlaceholder
                     ? null
@@ -118,7 +118,7 @@ export function TabelaGastos() {
               {row.getVisibleCells().map((cell) => (
                 <td
                   key={cell.id}
-                  className="border border-gray-300 dark:border-gray-700 px-4 py-2 text-gray-800 dark:text-green-200"
+                  className="border border-gray-300 dark:border-gray-700 px-2 py-2 sm:px-4 sm:py-3 text-gray-800 dark:text-green-200 text-xs sm:text-sm whitespace-nowrap"
                 >
                   {flexRender(
                     cell.column.columnDef.cell,
