@@ -12,7 +12,6 @@ export function Login() {
 
   return (
     <div className="min-h-screen dark:bg-gray-900">
-      {/* Navbar */}
       <div className="flex flex-row justify-between items-center px-8 py-6">
         <Link
           to="/"
@@ -29,7 +28,6 @@ export function Login() {
         </Link>
       </div>
 
-      {/* Conteúdo principal */}
       <main className="p-8 dark:bg-gray-900">
         <h1 className="text-5xl font-bold text-center dark:text-white">Login</h1>
 
@@ -48,7 +46,6 @@ export function Login() {
             className="w-full mb-6 px-4 py-3 rounded-md bg-gray-100 dark:bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
 
-          {/* Botão de login */}
           <button
             type="button"
             onClick={handleSignUp}
@@ -57,7 +54,6 @@ export function Login() {
             Entrar
           </button>
 
-          {/* Botão esqueceu a senha */}
           <button
             type="button"
             onClick={() => setIsOpen(true)}
@@ -66,7 +62,6 @@ export function Login() {
             Esqueceu sua senha?
           </button>
 
-          {/* Modal de recuperação */}
           {isOpen && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm z-50">
               <div className="bg-gray-900 rounded-xl shadow-2xl p-8 w-full max-w-md text-center">

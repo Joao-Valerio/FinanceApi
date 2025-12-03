@@ -261,15 +261,13 @@ const Gastos = () => {
       </button>
       )}
 
-      {/* Overlay para fechar a sidebar */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-opacity-20 z-10"
+          className="fixed inset-0 bg-black/40 z-10"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 h-full w-64 bg-gray-400 dark:bg-gray-800 text-black dark:text-white p-6 shadow-lg transform transition-transform duration-300 z-20 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"

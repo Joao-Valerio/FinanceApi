@@ -8,8 +8,6 @@ export const Sobre = () => {
 
   return (
     <div className="relative min-h-screen dark:bg-gray-900">
-
-      {/* Botão sidebar */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
         className="m-4 p-2 text-3xl text-balck rounded hover:bg-green-700 transition dark:text-white "
@@ -17,15 +15,13 @@ export const Sobre = () => {
         ☰
       </button>
 
-      {/* Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-opacity-30 z-10"
+          className="fixed inset-0 bg-black/40 z-10"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 h-full w-64 bg-gray-400 dark:bg-gray-800 text-black dark:text-white p-6 shadow-lg transform transition-transform duration-300 z-20 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -43,7 +39,6 @@ export const Sobre = () => {
           <li><Link to="/" className="hover:text-red-700 font-semibold">Sair</Link></li>
         </ul>
 
-        {/* Usuário logado */}
         <div className="absolute bottom-6 left-6 flex items-center space-x-4">
           <img
             src="https://i.pravatar.cc/100?u=joao"
@@ -58,7 +53,6 @@ export const Sobre = () => {
         </div>
       </div>
 
-      {/* Conteúdo principal */}
       <main>
         <section className="bg-white dark:bg-gray-900 pt-8 px-6">
           <h1 className="text-5xl md:text-7xl font-extrabold text-center text-gray-900 dark:text-white leading-tight mb-6">
@@ -97,7 +91,6 @@ export const Sobre = () => {
           </div>
         </section>
 
-        {/* Cards */}
         <div className="px-12 py-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-20 py-20 px-8 bg-gray-100 dark:bg-gray-700 rounded-2xl shadow-lg">
             <div className="flex flex-col items-center text-center gap-4">
