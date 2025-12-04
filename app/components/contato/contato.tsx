@@ -130,7 +130,7 @@ export const Contato: React.FC = () => {
       <div className="flex-1 flex flex-col">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="m-4 p-2 w-12 h-12 flex items-center justify-center text-3xl text-black rounded hover:bg-green-700 transition dark:text-white bg-white dark:bg-gray-800 shadow-md"
+          className="m-4 p-2 text-3xl text-black rounded hover:bg-green-700 transition dark:text-white"
         >
           ☰
         </button>
