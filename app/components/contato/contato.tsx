@@ -95,6 +95,7 @@ export const Contato: React.FC = () => {
             </Link>
           </div>
         </div>
+      </div>
 
         <main className="flex-1 px-4 py-4 sm:px-8 md:px-12 lg:px-20 
                 flex items-center justify-center">
@@ -142,7 +143,7 @@ export const Contato: React.FC = () => {
                   </span>
                 </div>
               </div>
-            </div>
+
 
               <form
                 onSubmit={handleSubmit}
