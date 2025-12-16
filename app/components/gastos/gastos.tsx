@@ -255,6 +255,7 @@ const Gastos = () => {
 
   return (
     <div className="relative min-h-screen dark:bg-gray-900">
+      
       {/* Botão do menu fixo no topo — só aparece quando sidebar está fechada */}
       {!sidebarOpen && (
       <button
