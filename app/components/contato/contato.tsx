@@ -127,16 +127,22 @@ export const Contato: React.FC = () => {
         />
       )}
 
-      <div className="flex-1 flex flex-col">
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="m-4 p-2 text-3xl text-black rounded hover:bg-green-700 transition dark:text-white"
-        >
-          ☰
-        </button>
+      <button
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        className="
+    fixed top-4 left-4 
+    z-20                    
+    p-2 text-3xl rounded
+    text-black dark:text-white
+    hover:bg-green-700 transition
+  "
+      >
+        ☰
+      </button>
 
-        <main className="flex-1 px-4 pb-10 pt-2 sm:px-8 md:px-12 lg:px-20 flex items-start justify-center">
-          <section className="w-full max-w-4xl mt-4 p-6 bg-gray-200 dark:bg-gray-900 shadow-lg rounded-2xl border border-gray-300 dark:border-gray-700">
+        <main className="flex-1 px-4 py-4 sm:px-8 md:px-12 lg:px-20 
+                flex items-center justify-center">
+          <section className="w-full max-w-4xl  p-6 bg-gray-200 dark:bg-gray-900 shadow-lg rounded-2xl border border-gray-300 dark:border-gray-700">
             <h2 className="text-3xl font-bold mb-6 text-green-600 dark:text-green-400">
               Fale com o Suporte
             </h2>
@@ -255,7 +261,6 @@ export const Contato: React.FC = () => {
             </div>
           </section>
         </main>
-      </div>
     </div>
   );
 };

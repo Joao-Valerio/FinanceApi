@@ -1,4 +1,3 @@
-// src/pages/Metas.tsx
 import { Link } from "react-router";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
@@ -62,7 +61,6 @@ const Metas = () => {
       </div>
 
       <main className="p-8 sm:p-6 md:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6 text-white">
-        {/* Cabeçalho */}
         <section className="bg-gray-200 dark:bg-gray-800 text-black dark:text-white p-6 rounded-2xl shadow-md lg:col-span-3 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Metas financeiras</h1>
@@ -72,7 +70,6 @@ const Metas = () => {
           </div>
         </section>
 
-        {/* Lista de metas */}
         <section className="bg-gray-200 dark:bg-gray-800 text-black dark:text-white p-6 rounded-2xl shadow-md lg:col-span-2 space-y-4">
           <h2 className="text-xl font-bold mb-2">Metas ativas</h2>
           <div className="grid gap-4 md:grid-cols-2">
@@ -108,7 +105,6 @@ const Metas = () => {
           </div>
         </section>
 
-        {/* Criar nova meta (futuro: IA avalia se é realista) */}
         <section className="bg-gray-200 dark:bg-gray-800 text-black dark:text-white p-6 rounded-2xl shadow-md">
           <h2 className="text-xl font-bold mb-4">Criar nova meta</h2>
           <form className="space-y-3">
