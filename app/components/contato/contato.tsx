@@ -37,8 +37,6 @@ export const Contato: React.FC = () => {
   };
 
   return (
-
-    
     <div className="relative min-h-screen dark:bg-gray-900">
       {/* Sidebar */}
       <button         
@@ -93,128 +91,127 @@ export const Contato: React.FC = () => {
 
 
 
-        <main className="flex-1 px-4 py-4 sm:px-8 md:px-12 lg:px-20 
-                flex items-center justify-center">
-          <section className="w-full max-w-4xl  p-6 bg-gray-200 dark:bg-gray-900 shadow-lg rounded-2xl border border-gray-300 dark:border-gray-700">
-            <h2 className="text-3xl font-bold mb-6 text-green-600 dark:text-green-400">
-              Fale com o Suporte
-            </h2>
+      <main className="flex-1 px-4 py-4 sm:px-8 md:px-12 lg:px-20 
+              flex items-center justify-center">
+        <section className="w-full max-w-4xl  p-6 bg-gray-200 dark:bg-gray-900 shadow-lg rounded-2xl border border-gray-300 dark:border-gray-700">
+          <h2 className="text-3xl font-bold mb-6 text-green-600 dark:text-green-400">
+            Fale com o Suporte
+          </h2>
 
-            <div className="md:flex md:gap-10">
-              {/* Infos */}
-              <div className="md:w-1/2 space-y-4 mb-6 md:mb-0">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  Ajuda com suas finanças
-                </h3>
-                <p className="text-gray-700 dark:text-gray-300">
-                  Está com dúvidas sobre lançamentos, metas, relatórios ou
-                  assinatura? Envie uma mensagem e a equipe de suporte financeiro
-                  responde o mais rápido possível.
-                </p>
-
-                <div>
-                  <span className="block font-medium text-gray-900 dark:text-white">
-                    Email:
-                  </span>
-                  <span className="text-gray-700 dark:text-gray-300">
-                    suporte@meusgastos.app
-                  </span>
-                </div>
-
-                <div>
-                  <span className="block font-medium text-gray-900 dark:text-white">
-                    Telefone:
-                  </span>
-                  <span className="text-gray-700 dark:text-gray-300">
-                    (11) 4000-1234
-                  </span>
-                </div>
-
-                <div>
-                  <span className="block font-medium text-gray-900 dark:text-white">
-                    Horário de atendimento:
-                  </span>
-                  <span className="text-gray-700 dark:text-gray-300">
-                    Segunda a sexta, 9h às 18h
-                  </span>
-                </div>
+          <div className="md:flex md:gap-10">
+            {/* Infos */}
+            <div className="md:w-1/2 space-y-4 mb-6 md:mb-0">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                Ajuda com suas finanças
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300">
+                Está com dúvidas sobre lançamentos, metas, relatórios ou
+                assinatura? Envie uma mensagem e a equipe de suporte financeiro
+                responde o mais rápido possível.
+              </p>
+              <div>
+                <span className="block font-medium text-gray-900 dark:text-white">
+                  Email:
+                </span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  suporte@meusgastos.app
+                </span>
               </div>
 
+              <div>
+                <span className="block font-medium text-gray-900 dark:text-white">
+                  Telefone:
+                </span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  (11) 4000-1234
+                </span>
+              </div>
 
-              <form
-                onSubmit={handleSubmit}
-                className="md:w-1/2 flex flex-col gap-4 text-gray-900 dark:text-white"
-              >
-                <h2 className="font-semibold">Nome</h2>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Seu nome"
-                  className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 p-3 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-                  value={form.name}
-                  onChange={handleChange}
-                />
-
-                <h2 className="font-semibold">Email</h2>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="seuemail@exemplo.com"
-                  className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 p-3 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-                  value={form.email}
-                  onChange={handleChange}
-                />
-
-                <h2 className="font-semibold">Mensagem</h2>
-                <textarea
-                  name="message"
-                  placeholder="Descreva sua dúvida, erro ou sugestão sobre o controle financeiro"
-                  className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 p-3 rounded focus:outline-none focus:ring-2 focus:ring-green-500 h-32"
-                  value={form.message}
-                  onChange={handleChange}
-                />
-
-                {error && <span className="text-red-600">{error}</span>}
-                {submitted && (
-                  <span className="text-green-600 dark:text-green-400">
-                    Mensagem enviada com sucesso! Em breve você receberá um retorno
-                    do suporte.
-                  </span>
-                )}
-
-                <button
-                  type="submit"
-                  className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition-colors duration-200"
-                >
-                  Enviar mensagem
-                </button>
-              </form>
+              <div>
+                <span className="block font-medium text-gray-900 dark:text-white">
+                  Horário de atendimento:
+                </span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  Segunda a sexta, 9h às 18h
+                </span>
+              </div>
             </div>
 
-            {/* Redes sociais */}
-            <div className="mt-8 flex gap-6">
-              <a
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-gray-800 dark:text-gray-200 hover:text-green-500 transition-colors"
-              >
-                <FaInstagram className="text-2xl" />
-                <span>Instagram</span>
-              </a>
 
-              <a
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-gray-800 dark:text-gray-200 hover:text-green-500 transition-colors"
+            <form
+              onSubmit={handleSubmit}
+              className="md:w-1/2 flex flex-col gap-4 text-gray-900 dark:text-white"
+            >
+              <h2 className="font-semibold">Nome</h2>
+              <input
+                type="text"
+                name="name"
+                placeholder="Seu nome"
+                className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 p-3 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                value={form.name}
+                onChange={handleChange}
+              />
+
+              <h2 className="font-semibold">Email</h2>
+              <input
+                type="email"
+                name="email"
+                placeholder="seuemail@exemplo.com"
+                className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 p-3 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                value={form.email}
+                onChange={handleChange}
+              />
+
+              <h2 className="font-semibold">Mensagem</h2>
+              <textarea
+                name="message"
+                placeholder="Descreva sua dúvida, erro ou sugestão sobre o controle financeiro"
+                className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 p-3 rounded focus:outline-none focus:ring-2 focus:ring-green-500 h-32"
+                value={form.message}
+                onChange={handleChange}
+              />
+
+              {error && <span className="text-red-600">{error}</span>}
+              {submitted && (
+                <span className="text-green-600 dark:text-green-400">
+                  Mensagem enviada com sucesso! Em breve você receberá um retorno
+                  do suporte.
+                </span>
+              )}
+
+              <button
+                type="submit"
+                className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition-colors duration-200"
               >
-                <FaWhatsapp className="text-2xl" />
-                <span>WhatsApp</span>
-              </a>
-            </div>
-          </section>
-        </main>
+                Enviar mensagem
+              </button>
+            </form>
+          </div>
+
+          {/* Redes sociais */}
+          <div className="mt-8 flex gap-6">
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-gray-800 dark:text-gray-200 hover:text-green-500 transition-colors"
+            >
+              <FaInstagram className="text-2xl" />
+              <span>Instagram</span>
+            </a>
+
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-gray-800 dark:text-gray-200 hover:text-green-500 transition-colors"
+            >
+              <FaWhatsapp className="text-2xl" />
+              <span>WhatsApp</span>
+            </a>
+          </div>
+        </section>
+      </main>
     </div>
   );
 };
