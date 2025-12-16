@@ -19,18 +19,6 @@ export const Contato: React.FC = () => {
   const [form, setForm] = useState<FormState>(initialState);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (sidebarOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [sidebarOpen]);
-
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -49,6 +37,8 @@ export const Contato: React.FC = () => {
   };
 
   return (
+
+    
     <div className="relative min-h-screen dark:bg-gray-900">
       {/* Sidebar */}
       <button         
@@ -70,7 +60,6 @@ export const Contato: React.FC = () => {
         }`}
       >
 
-      
         <h2 className="text-4xl font-bold mb-6">Painel</h2>
         <ul className="space-y-4">
           <li><Link to="/dashboard" className="hover:text-green-400 font-semibold">Dashboard</Link></li>
@@ -89,13 +78,22 @@ export const Contato: React.FC = () => {
             alt="Foto de Joao"
             className="w-10 h-10 rounded-full border-2 border-green-500"
           />
+
           <div>
+
             <Link to="/">
+
               <p className="text-sm font-semibold">Joao</p>
+
             </Link>
+
           </div>
+
         </div>
+
       </div>
+
+
 
         <main className="flex-1 px-4 py-4 sm:px-8 md:px-12 lg:px-20 
                 flex items-center justify-center">
