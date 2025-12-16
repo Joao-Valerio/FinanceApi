@@ -325,20 +325,19 @@ export const Dashboard = () => {
             <li><Link to="/sobre" className="hover:text-green-400 font-semibold">Sobre</Link></li>
             <li><Link to="/contato" className="hover:text-green-400 font-semibold">Contato</Link></li>
             <li><Link to="/" className="hover:text-red-700 font-semibold">Sair</Link></li>
-
         </ul>
-        <div className="absolute bottom-6 left-6 flex items-center space-x-4">
-  <img
-    src="https://i.pravatar.cc/100?u=joao"
-    alt="Foto de Joao"
-    className="w-10 h-10 rounded-full border-2 border-green-500"
-  />
-  <div>
-    <Link to="/">
-        <p className="text-sm font-semibold">Joao</p>
-    </Link>
-  </div>
 
+        <div className="absolute bottom-6 left-6 flex items-center space-x-4">
+          <img
+            src="https://i.pravatar.cc/100?u=joao"
+            alt="Foto de Joao"
+            className="w-10 h-10 rounded-full border-2 border-green-500"
+          />
+          <div>
+            <Link to="/">
+              <p className="text-sm font-semibold">Joao</p>
+            </Link>
+          </div>
         </div>
       </div>
 

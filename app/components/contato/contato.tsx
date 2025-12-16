@@ -78,9 +78,7 @@ export const Contato: React.FC = () => {
             alt="Foto de Joao"
             className="w-10 h-10 rounded-full border-2 border-green-500"
           />
-
           <div>
-
             <Link to="/">
 
               <p className="text-sm font-semibold">Joao</p>
