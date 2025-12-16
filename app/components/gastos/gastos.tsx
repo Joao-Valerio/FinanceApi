@@ -88,48 +88,52 @@ export function TabelaGastos() {
   });
 
   return (
-    <div className="mt-8 w-full overflow-x-auto rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-200 dark:bg-gray-800 p-2 sm:p-4">
-      <table className="min-w-full border-collapse border border-gray-300 dark:border-gray-700 rounded-lg text-sm sm:text-base ">
-        <thead className="bg-green-600 dark:bg-green-900">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
+    <div className="mt-8 w-full overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+      <div className="overflow-x-auto">
+        <table className="min-w-full text-left text-sm text-gray-600 dark:text-gray-300">
+          <thead className="bg-green-600 text-white dark:bg-green-900">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className="border border-gray-300 dark:border-gray-700 px-2 py-2 sm:px-4 sm:py-3 text-left text-gray-800 dark:text-green-200 text-xs sm:text-sm"
+                  scope="col"
+                  className="px-6 py-4 font-semibold uppercase tracking-wider text-xs sm:text-sm"
                 >
                   {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                  ? null
+                  : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
                 </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              className="even:bg-gray-50 odd:bg-white hover:bg-green-200 dark:even:bg-gray-800 dark:odd:bg-gray-700 dark:hover:bg-green-900"
-            >
-              {row.getVisibleCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  className="border border-gray-300 dark:border-gray-700 px-2 py-2 sm:px-4 sm:py-3 text-gray-800 dark:text-green-200 text-xs sm:text-sm whitespace-nowrap"
-                >
-                  {flexRender(
-                    cell.column.columnDef.cell,
-                    cell.getContext()
-                  )}
-                </td>
-              ))}
-            </tr>
-          ))}
+                ))}
+              </tr>
+            ))}
+          </thead>
+
+      <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
+        {table.getRowModel().rows.map((row) => (
+          <tr
+            key={row.id}
+            className="transition-colors hover:bg-green-50 dark:hover:bg-green-900/30"
+          >
+            {row.getVisibleCells().map((cell) => (
+              <td
+                key={cell.id}
+                className="px-6 py-4 whitespace-nowrap"
+              >
+                {flexRender(
+                  cell.column.columnDef.cell,
+                  cell.getContext()
+                )}
+              </td>
+            ))}
+          </tr>
+        ))}
         </tbody>
-      </table>
+        </table>
+      </div>
     </div>
   );
 }
