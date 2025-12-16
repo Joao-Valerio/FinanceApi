@@ -338,8 +338,8 @@ export const Dashboard = () => {
         <p className="text-sm font-semibold">Joao</p>
     </Link>
   </div>
-</div>
 
+        </div>
       </div>
 
 <main className="p-8 sm:p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-white ">
