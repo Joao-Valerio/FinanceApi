@@ -362,7 +362,7 @@ export const Dashboard = () => {
         placeholder="Valor"
         className="w-full p-2 rounded-3xl bg-gray-400 dark:bg-gray-700 dark:text-white"
       />
-      <select className="w-full p-2 rounded-3xl bg-gray-400 dark:bg-gray-700 dark:text-white md:col-span-2">
+      <select className="w-full p-2 rounded-3xl bg-gray-400 dark:bg-gray-700 dark:text-white md:col-span-2" aria-label="Tipo de transação">
         <option value="entrada">Entrada</option>
         <option value="saida">Saída</option>
       </select>

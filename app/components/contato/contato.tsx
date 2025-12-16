@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { ContactForm } from "./contatoForm"; // Importando o componente
-import { Sidebar } from "./contatoSidebar";         // Importando o componente
+import { ContactForm } from "./contatoForm";
+import { Sidebar } from "./contatoSidebar";   
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 export const Contato: React.FC = () => {
