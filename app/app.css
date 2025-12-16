@@ -134,4 +134,7 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  .sidebar {
+    @apply fixed top-0 left-0 h-full w-64 bg-gray-800 text-white;
+  }
 }
