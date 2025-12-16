@@ -1,4 +1,4 @@
-import Contato from "../components/contato/contato";
+import { Contato } from "../components/contato/contato";
 
 export function meta() {
   return [
