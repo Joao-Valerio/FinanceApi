@@ -1,16 +1,18 @@
 import {
-  isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  isRouteErrorResponse,
+  useRouteError,
 } from "react-router";
+import type { LinksFunction } from "react-router";
 
-import type { Route } from "./+types/root";
-import "./app.css";
+import stylesheet from "./app.css?url";
 
-export const links: Route.LinksFunction = () => [
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: stylesheet },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
     rel: "preconnect",
@@ -25,7 +27,7 @@ export const links: Route.LinksFunction = () => [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-br">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -45,31 +47,32 @@ export default function App() {
   return <Outlet />;
 }
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let message = "Oops!";
-  let details = "An unexpected error occurred.";
-  let stack: string | undefined;
+export function ErrorBoundary() {
+  const error = useRouteError();
+  let message = "Ocorreu um erro inesperado!";
+  let details = "Tente recarregar a página.";
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
+    message = error.status === 404 ? "404" : "Erro";
+    details = error.status === 404 ? "Página não encontrada" : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
-    stack = error.stack;
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
-      {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
-          <code>{stack}</code>
-        </pre>
-      )}
-    </main>
+    <html lang="pt-br">
+      <head>
+        <title>Erro</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <div className="p-4 font-sans">
+          <h1 className="text-2xl font-bold text-red-600">{message}</h1>
+          <p className="mt-2 text-gray-600">{details}</p>
+        </div>
+        <Scripts />
+      </body>
+    </html>
   );
 }
