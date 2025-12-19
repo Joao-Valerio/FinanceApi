@@ -26,7 +26,7 @@ export const ContactForm: React.FC = () => {
   };
 
   return (
-     <form onSubmit={handleSubmit} className="w-full flex flex-col gap-5">
+     <form onSubmit={handleSubmit} className="md:w-1/2 flex flex-col gap-4">
           <InputFloat
             type="text"
             name="name"
