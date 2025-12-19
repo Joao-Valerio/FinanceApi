@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { InputFloat } from '../inputFloat/InputFloat';
 
 
 type FormState = { name: string; email: string; message: string; };
@@ -25,22 +26,40 @@ export const ContactForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="md:w-1/2 flex flex-col gap-4 text-gray-900 dark:text-white">
-      <h2 className="font-semibold">Nome</h2>
-      <input 
-        name="name" 
-        value={form.name} 
-        onChange={handleChange} 
-        className="border p-3 rounded dark:bg-gray-800" 
-        placeholder="Seu nome"
-      />
-      
-      {error && <span className="text-red-600">{error}</span>}
-      {submitted && <span className="text-green-600">Enviado com sucesso!</span>}
-      
-      <button type="submit" className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">
-        Enviar
-      </button>
-    </form>
+     <form onSubmit={handleSubmit} className="w-full flex flex-col gap-5">
+          <InputFloat
+            type="text"
+            name="name"
+            placeholder="Nome"
+            value={form.name}
+            onChange={handleChange}
+            label="Nome"
+          />
+          <InputFloat
+            type="email"
+            name="email"
+            placeholder="Email"
+            label = "E-mail"
+            value={form.email}
+            onChange={handleChange}
+          />
+          <InputFloat
+            name="message"
+            placeholder="Sua mensagem"
+            label = "Mensagem"
+            value={form.message}
+            onChange={handleChange}
+          />
+          {error && <span className="text-red-600">{error}</span>}
+          {submitted && (
+            <span className="text-green-700">Mensagem enviada com sucesso! Entraremos em contato.</span>
+          )}
+          <button
+            type="submit"
+            className="bg-green-700 text-white font-semibold py-2 px-4 rounded hover:bg-green-800 duration-200"
+          >
+            Enviar mensagem
+          </button>
+        </form>
   );
 };

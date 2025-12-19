@@ -11,7 +11,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       "placeholder-transparent " +
       "border border-gray-400 rounded-md " +
       "transition-all duration-200 " +
-      "focus:border-blue-600 focus:outline-none focus:ring-0";
+      "focus:border-green-600 focus:outline-none focus:ring-0";
 
     const classes = `${base} ${className || ""}`;
 

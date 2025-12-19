@@ -8,18 +8,15 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   return (
-    <>
-      {/* Overlay: Só aparece no mobile quando o menu está aberto */}
+    <div>
       {isOpen && (
         <div className="fixed inset-0 bg-black/40 z-20 md:hidden" onClick={onClose} />
-      )}
+      )}  
       <aside className={`fixed top-0 left-0 h-full w-64 bg-gray-100 dark:bg-gray-800 p-6 shadow-xl z-30 transition-transform duration-300 
-        ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
+        ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
         
-        <div className="flex justify-between items-center mb-10">
+        <div className="flex justify-content items-center mb-10">
           <h2 className="text-3xl font-bold text-green-600">Painel</h2>
-          {/* Botão fechar só no mobile */}
-          <button onClick={onClose} className="md:hidden text-2xl font-bold">&times;</button>
         </div>
 
         <nav>
@@ -52,6 +49,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
       </aside>
-    </>
+    </div>
   );
 };
