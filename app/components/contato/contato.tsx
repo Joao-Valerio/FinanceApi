@@ -31,19 +31,48 @@ export const Contato: React.FC = () => {
           
           <h2 className="text-3xl font-bold mb-6 text-green-600">Fale com o Suporte</h2>
 
-          <div className="md:flex md:gap-10">
+          <div className="md:flex gap-4 ">
             <div className="md:w-1/2 space-y-4 mb-6 md:mb-0">
                <h3 className="text-xl font-bold">Ajuda com suas finanças</h3>
-               <p>Texto de ajuda...</p>
+               <p>
+                  Está com dúvidas sobre lançamentos, metas, relatórios ou
+                  assinatura? Envie uma mensagem e a equipe de suporte financeiro
+                  responde o mais rápido possível.
+                </p>
+                 <div>
+                  <span className="block font-medium text-gray-900 dark:text-white">
+                    Email:
+                  </span>
+                  <span className="text-gray-700 dark:text-gray-300">
+                    suporte@meusgastos.app
+                  </span>
+                </div>
+
+                <div>
+                  <span className="block font-medium text-gray-900 dark:text-white">
+                    Telefone:
+                  </span>
+                  <span className="text-gray-700 dark:text-gray-300">
+                    (11) 4000-1234
+                  </span>
+                </div>
+
+                <div>
+                  <span className="block font-medium text-gray-900 dark:text-white">
+                    Horário de atendimento:
+                  </span>
+                  <span className="text-gray-700 dark:text-gray-300">
+                    Segunda a sexta, 9h às 18h
+                  </span>
+                </div>
+
             </div>
 
             <ContactForm />
+          </div>            
+          <div className="mt-8 flex gap-2 ">
+            <FaInstagram /> <FaWhatsapp />
           </div>
-          
-          <div className="mt-8 flex gap-6">
-             <FaInstagram /> <FaWhatsapp />
-          </div>
-
         </section>
       </main>
     </div>
