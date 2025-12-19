@@ -9,7 +9,6 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   return (
     <>
-      {/* Overlay: Só aparece no mobile quando o menu está aberto */}
       {isOpen && (
         <div className="fixed inset-0 bg-black/40 z-20 md:hidden" onClick={onClose} />
       )}
@@ -18,7 +17,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         
         <div className="flex justify-between items-center mb-10">
           <h2 className="text-3xl font-bold text-green-600">Painel</h2>
-          {/* Botão fechar só no mobile */}
           <button onClick={onClose} className="md:hidden text-2xl font-bold">&times;</button>
         </div>
 

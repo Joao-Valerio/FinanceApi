@@ -28,9 +28,9 @@ export const InputFloat = React.forwardRef<
 
       <label
         htmlFor={effectiveId}
-        className="
+        className=" 
           absolute left-3 top-1/2 -translate-y-1/2 
-          bg-white px-1 text-gray-500 pointer-events-none
+          bg-gray-200 px-1 text-black  pointer-events-none
           transition-all duration-200 
 
           peer-placeholder-shown:text-base
@@ -40,7 +40,7 @@ export const InputFloat = React.forwardRef<
           peer-focus:top-0
           peer-focus:-translate-y-1/2
           peer-focus:text-xs
-          peer-focus:text-blue-600
+          peer-focus:text-green-600
 
           peer-not-placeholder-shown:top-0
           peer-not-placeholder-shown:-translate-y-1/2
