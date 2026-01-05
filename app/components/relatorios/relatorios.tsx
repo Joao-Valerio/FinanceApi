@@ -2,7 +2,7 @@
 import { Link } from "react-router";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
-import { Sidebar } from "./relatoriossidebar";
+import { Sidebar } from "./relatoriosSidebar";
 
 const Relatorios = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
