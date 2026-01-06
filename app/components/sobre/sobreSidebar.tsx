@@ -26,8 +26,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             <li><Link to="/metas" className="block p-2 hover:bg-green-100 dark:hover:bg-green-900 rounded font-semibold text-gray-700 dark:text-gray-200">Metas</Link></li>
             <li><Link to="/relatorios" className="block p-2 hover:bg-green-100 dark:hover:bg-green-900 rounded font-semibold text-gray-700 dark:text-gray-200">Relatórios</Link></li>
             <li><Link to="/recursos" className="block p-2 hover:bg-green-100 dark:hover:bg-green-900 rounded font-semibold text-gray-700 dark:text-gray-200">Recursos</Link></li>
-            <li><Link to="/sobre" className="block p-2 hover:bg-green-100 dark:hover:bg-green-900 rounded font-semibold text-gray-700 dark:text-gray-200">Sobre</Link></li>
-            <li><Link to="/contato" className="block p-2 bg-green-600 text-white rounded font-semibold shadow-md">Contato</Link></li>
+            <li><Link to="/sobre" className="block p-2 bg-green-600 text-white rounded font-semibold shadow-md">Sobre</Link></li>
+            <li><Link to="/contato" className=" block p-2 hover:bg-green-100 dark:hover:bg-green-900 rounded font-semibold text-gray-700 dark:text-gray-200">Contato</Link></li>
           </ul>
         </nav>
 

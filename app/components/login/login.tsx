@@ -36,14 +36,14 @@ export function Login() {
             type="email"
             placeholder="Email"
             aria-label="Digite seu email"
-            className="w-full mb-4 px-4 py-3 rounded-md bg-gray-100 dark:bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full mb-4 px-4 py-3 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
 
           <input
             type="password"
             placeholder="Senha"
             aria-label="Digite sua senha"
-            className="w-full mb-6 px-4 py-3 rounded-md bg-gray-100 dark:bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full mb-6 px-4 py-3 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
 
           <button
