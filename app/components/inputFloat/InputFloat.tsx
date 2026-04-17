@@ -1,54 +1,47 @@
 import React, { useId } from "react";
 import Input from "../input/Input";
 
-
-type InputFloatProps =  {
+type InputFloatProps = {
   label: string;
   containerClassName?: string;
-}& Omit<React.ComponentProps<"input">, "className">;
+} & Omit<React.ComponentProps<"input">, "className">;
 
+export const InputFloat = React.forwardRef<HTMLInputElement, InputFloatProps>(
+  ({ label, id, containerClassName, ...inputProps }, ref) => {
+    const internalId = useId();
+    const effectiveId = id || internalId;
 
-export const InputFloat = React.forwardRef<
-  HTMLInputElement,
-  InputFloatProps
->(({ label, id, containerClassName, ...inputProps }, ref) => {
+    return (
+      <div className={`relative w-full ${containerClassName || ""}`}>
+        <Input {...inputProps} ref={ref} id={effectiveId} placeholder=" " />
 
-  const internalId = useId();
-  const effectiveId = id || internalId;
+        <label
+          htmlFor={effectiveId}
+          className="
+            absolute left-3 top-1/2 -translate-y-1/2
+            bg-gray-100 dark:bg-gray-900
+            px-1 text-gray-600 dark:text-gray-300 pointer-events-none
+            transition-all duration-200
 
-  return (
-    <div className={`relative w-full ${containerClassName || ""}`}>
-      
-      <Input
-        {...inputProps}
-        ref={ref}
-        id={effectiveId}
-        placeholder=" "
-      />
+            peer-placeholder-shown:text-base
+            peer-placeholder-shown:top-1/2
+            peer-placeholder-shown:-translate-y-1/2
 
-      <label
-        htmlFor={effectiveId}
-        className=" 
-          absolute left-3 top-1/2 -translate-y-1/2 
-          bg-gray-200 px-1 text-black  pointer-events-none
-          transition-all duration-200 
+            peer-focus:top-0
+            peer-focus:-translate-y-1/2
+            peer-focus:text-xs
+            peer-focus:text-green-600 dark:peer-focus:text-green-400
 
-          peer-placeholder-shown:text-base
-          peer-placeholder-shown:top-1/2
-          peer-placeholder-shown:-translate-y-1/2
+            peer-not-placeholder-shown:top-0
+            peer-not-placeholder-shown:-translate-y-1/2
+            peer-not-placeholder-shown:text-xs
+          "
+        >
+          {label}
+        </label>
+      </div>
+    );
+  }
+);
 
-          peer-focus:top-0
-          peer-focus:-translate-y-1/2
-          peer-focus:text-xs
-          peer-focus:text-green-600
-
-          peer-not-placeholder-shown:top-0
-          peer-not-placeholder-shown:-translate-y-1/2
-          peer-not-placeholder-shown:text-xs
-        "
-      >
-        {label}
-      </label>
-    </div>
-  );
-});
+InputFloat.displayName = "InputFloat";

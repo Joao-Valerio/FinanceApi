@@ -4,68 +4,68 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   function handleSignUp() {
-    console.log("Cadastro realizado!");
     navigate("/dashboard");
   }
 
   return (
-    <div className="min-h-screen dark:bg-gray-900">
-      {/* Navbar */}
-      <div className="flex flex-row justify-between items-center px-8 py-6">
+    <div className="min-h-dvh bg-white dark:bg-gray-950 text-gray-900 dark:text-white">
+      <div className="flex flex-row justify-between items-center gap-3 px-4 sm:px-8 py-4 sm:py-6">
         <Link
           to="/"
-          className="px-6 py-3 text-lg font-semibold text-green-600 border-2 border-green-600 rounded-full hover:bg-green-600 hover:text-white transition"
+          className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg font-semibold text-green-600 border-2 border-green-600 rounded-full hover:bg-green-600 hover:text-white transition"
         >
           Home
         </Link>
 
         <Link
           to="/login"
-          className="px-6 py-3 text-lg font-semibold text-white border-2 border-green-600 rounded-full bg-green-600 hover:bg-white hover:text-green-600 transition"
+          className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg font-semibold text-white border-2 border-green-600 rounded-full bg-green-600 hover:bg-transparent hover:text-green-600 transition"
         >
           Login
         </Link>
       </div>
 
-      {/* Conteúdo principal */}
-      <main className="p-8 dark:bg-gray-900">
-        <h1 className="text-5xl font-bold text-center dark:text-white">Sign Up</h1>
+      <main className="px-4 sm:px-8 pb-10">
+        <h1 className="text-4xl sm:text-5xl font-bold text-center">Cadastro</h1>
 
-        <div className="dark:bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-md mx-auto mt-4">
+        <div className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-sm w-full max-w-md mx-auto mt-6">
           <input
             type="text"
             placeholder="Nome"
             aria-label="Digite seu nome"
-            className="w-full mb-4 px-4 py-3 rounded-md bg-gray-100 dark:bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full mb-4 px-4 py-3 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
 
           <input
             type="email"
             placeholder="Email"
             aria-label="Digite seu email"
-            className="w-full mb-4 px-4 py-3 rounded-md bg-gray-100 dark:bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full mb-4 px-4 py-3 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
 
           <input
             type="password"
             placeholder="Senha"
             aria-label="Digite sua senha"
-            className="w-full mb-6 px-4 py-3 rounded-md bg-gray-100 dark:bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full mb-6 px-4 py-3 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
 
           <button
             type="button"
             onClick={handleSignUp}
-            className="w-full bg-green-500 border-green-500 text-white font-semibold py-3 rounded-md duration-300 hover:bg-white hover:text-green-600 transition"
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-md transition"
           >
             Cadastrar
           </button>
 
           <Link
             to="/login"
-            className="block text-center text-sm text-black hover:text-gray-500 mt-4 dark:text-gray-400 dark:hover:text-white"
+            className="block text-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mt-4 transition"
           >
-            Já tem uma conta? <span className="font-semibold">Login</span>
+            Já tem uma conta?{" "}
+            <span className="font-semibold text-green-600 dark:text-green-400">
+              Login
+            </span>
           </Link>
         </div>
       </main>

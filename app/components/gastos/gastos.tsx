@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Sidebar } from './gastosSidebar';
+import React from "react";
+import { AppLayout } from "../layout/AppLayout";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 import type { ChartConfig } from "../ui/chart";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -24,14 +24,18 @@ import {
   createColumnHelper,
 } from "@tanstack/react-table";
 
-type Gasto = {
+export type Gasto = {
   descricao: string;
   valor: number;
-  data: string; 
+  data: string;
   categoria: string;
 };
 
-// Exemplo de dados
+export type ChartDataGasto = {
+  date: string;
+  gastos: number;
+};
+
 const dados: Gasto[] = [
   {
     descricao: "Conta de luz",
@@ -41,13 +45,13 @@ const dados: Gasto[] = [
   },
   {
     descricao: "Supermercado",
-    valor: 230.10,
+    valor: 230.1,
     data: "2024-09-05",
     categoria: "Alimentação",
   },
   {
     descricao: "Assinatura streaming",
-    valor: 29.90,
+    valor: 29.9,
     data: "2024-09-10",
     categoria: "Entretenimento",
   },
@@ -62,17 +66,11 @@ const columns: ColumnDef<Gasto, any>[] = [
   }),
   columnHelper.accessor("valor", {
     header: "Valor",
-    cell: (info) => {
-      const val = info.getValue();
-      return <span>R$ {val.toFixed(2)}</span>;
-    },
+    cell: (info) => <span>R$ {info.getValue().toFixed(2)}</span>,
   }),
   columnHelper.accessor("data", {
     header: "Data",
-    cell: (info) => {
-      const d = new Date(info.getValue());
-      return d.toLocaleDateString("pt-BR");
-    },
+    cell: (info) => new Date(info.getValue()).toLocaleDateString("pt-BR"),
   }),
   columnHelper.accessor("categoria", {
     header: "Categoria",
@@ -88,60 +86,55 @@ export function TabelaGastos() {
   });
 
   return (
-    <div className="mt-8 w-full overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+    <div className="mt-6 w-full overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-gray-900">
       <div className="overflow-x-auto">
-        <table className="min-w-full text-left text-sm text-gray-600 dark:text-gray-300">
-          <thead className="bg-green-600 text-white dark:bg-green-900">
+        <table className="min-w-full text-left text-sm text-gray-700 dark:text-gray-200">
+          <thead className="bg-green-600 text-white">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  scope="col"
-                  className="px-6 py-4 font-semibold uppercase tracking-wider text-xs sm:text-sm"
-                >
-                  {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                </th>
+                  <th
+                    key={header.id}
+                    scope="col"
+                    className="px-4 sm:px-6 py-3 font-semibold uppercase tracking-wider text-xs sm:text-sm"
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </th>
                 ))}
               </tr>
             ))}
           </thead>
-
-      <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
-        {table.getRowModel().rows.map((row) => (
-          <tr
-            key={row.id}
-            className="transition-colors hover:bg-green-50 dark:hover:bg-green-900/30"
-          >
-            {row.getVisibleCells().map((cell) => (
-              <td
-                key={cell.id}
-                className="px-6 py-4 whitespace-nowrap"
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
+            {table.getRowModel().rows.map((row) => (
+              <tr
+                key={row.id}
+                className="transition-colors hover:bg-green-50 dark:hover:bg-green-900/30"
               >
-                {flexRender(
-                  cell.column.columnDef.cell,
-                  cell.getContext()
-                )}
-              </td>
+                {row.getVisibleCells().map((cell) => (
+                  <td
+                    key={cell.id}
+                    className="px-4 sm:px-6 py-3 whitespace-nowrap"
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
             ))}
-          </tr>
-        ))}
-        </tbody>
+          </tbody>
         </table>
       </div>
     </div>
   );
 }
 
-
 export const description = "Gráfico de gastos do cliente";
 
-const chartData = [
+const chartData: ChartDataGasto[] = [
   { date: "2024-04-01", gastos: 222 },
   { date: "2024-04-02", gastos: 97 },
   { date: "2024-04-03", gastos: 167 },
@@ -152,7 +145,6 @@ const chartData = [
   { date: "2024-04-08", gastos: 409 },
   { date: "2024-04-09", gastos: 59 },
   { date: "2024-04-10", gastos: 261 },
-  // ... seu restante dos dados
 ];
 
 const chartConfig = {
@@ -168,13 +160,15 @@ export function ChartLineGastosCliente() {
     []
   );
 
-  const saldo = 1250; 
+  const saldo = 1250;
 
   return (
-    <Card className="py-4 sstext-black dark:bg-gray-800 dark:text-white p-4 bg-gray-200">
+    <Card className="py-4 bg-gray-100 dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white">
       <div className="px-6 mb-2">
-        <span className="text-4xl font-bold ">Saldo atual</span>
-        <p className="text-3xl font-semibold text-green-400 mt-2">R$ {saldo.toLocaleString()}</p>
+        <span className="text-2xl sm:text-3xl font-bold">Saldo atual</span>
+        <p className="text-2xl sm:text-3xl font-semibold text-green-600 dark:text-green-400 mt-1">
+          R$ {saldo.toLocaleString("pt-BR")}
+        </p>
       </div>
 
       <CardHeader className="flex flex-col items-stretch border-b !p-0 sm:flex-row">
@@ -190,7 +184,7 @@ export function ChartLineGastosCliente() {
               Total de Gastos
             </span>
             <span className="text-lg leading-none font-bold sm:text-3xl">
-              {total.toLocaleString()}
+              R$ {total.toLocaleString("pt-BR")}
             </span>
           </div>
         </div>
@@ -199,7 +193,7 @@ export function ChartLineGastosCliente() {
       <CardContent className="px-2 sm:p-6">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-[220px] sm:h-[260px] w-full"
         >
           <LineChart
             accessibilityLayer
@@ -213,33 +207,32 @@ export function ChartLineGastosCliente() {
               axisLine={false}
               tickMargin={8}
               minTickGap={32}
-              tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString("pt-BR", {
+              tickFormatter={(value) =>
+                new Date(value).toLocaleDateString("pt-BR", {
                   month: "short",
                   day: "numeric",
-                });
-              }}
+                })
+              }
             />
             <ChartTooltip
               content={
                 <ChartTooltipContent
                   className="w-[150px]"
                   nameKey="gastos"
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("pt-BR", {
+                  labelFormatter={(value) =>
+                    new Date(value).toLocaleDateString("pt-BR", {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
-                    });
-                  }}
+                    })
+                  }
                 />
               }
             />
             <Line
               dataKey="gastos"
               type="monotone"
-              stroke={`#22c55e`}
+              stroke="#22c55e"
               strokeWidth={2}
               dot={false}
             />
@@ -251,36 +244,14 @@ export function ChartLineGastosCliente() {
 }
 
 const Gastos = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
-            <button
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="m-4 p-2 text-3xl text-black rounded hover:bg-green-700 transition dark:text-white"
-      >
-        ☰
-      </button>
-
-
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-10"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-
-<div className="relative gap-8 ">
-  <main className="mt-4 px-4 sm:px-20 ">
-    <ChartLineGastosCliente />
-    <TabelaGastos />
-  </main>
-</div>
-
-    </div>
+    <AppLayout>
+      <main className="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 max-w-7xl mx-auto">
+        <ChartLineGastosCliente />
+        <TabelaGastos />
+      </main>
+    </AppLayout>
   );
 };
+
 export default Gastos;

@@ -1,80 +1,73 @@
-import React, { useState } from "react";
+import React from "react";
 import { ContactForm } from "./contatoForm";
-import { Sidebar } from "./contatoSidebar";
+import { AppLayout } from "../layout/AppLayout";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 export const Contato: React.FC = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
-            <button
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="m-4 p-2 text-3xl text-black rounded hover:bg-green-700 transition dark:text-white"
-      >
-        ☰
-      </button>
+    <AppLayout>
+      <main className="px-4 py-6 sm:px-6 md:px-10 lg:px-20 flex items-start justify-center">
+        <section className="w-full max-w-4xl p-6 sm:p-8 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-green-600 dark:text-green-400">
+            Fale com o Suporte
+          </h2>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <h3 className="text-lg sm:text-xl font-bold">
+                Ajuda com suas finanças
+              </h3>
+              <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
+                Dúvidas sobre lançamentos, metas, relatórios ou assinatura?
+                Envie uma mensagem e a equipe de suporte responde o mais rápido
+                possível.
+              </p>
 
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-10"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+              <div>
+                <span className="block font-medium">Email:</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  suporte@meusgastos.app
+                </span>
+              </div>
 
+              <div>
+                <span className="block font-medium">Telefone:</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  (11) 4000-1234
+                </span>
+              </div>
 
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-
-      <main className="flex-1 px-4 py-4 sm:px-8 md:px-12 lg:px-20 flex items-center justify-center">
-        <section className="w-full max-w-4xl p-6 bg-gray-200 dark:bg-gray-900 rounded-2xl shadow-lg border dark:border-gray-700">
-          
-          <h2 className="text-3xl font-bold mb-6 text-green-600">Fale com o Suporte</h2>
-
-          <div className="md:flex gap-4 ">
-            <div className="md:w-1/2 space-y-4 mb-6 md:mb-0">
-               <h3 className="text-xl font-bold">Ajuda com suas finanças</h3>
-               <p>
-                  Está com dúvidas sobre lançamentos, metas, relatórios ou
-                  assinatura? Envie uma mensagem e a equipe de suporte financeiro
-                  responde o mais rápido possível.
-                </p>
-                 <div>
-                  <span className="block font-medium text-gray-900 dark:text-white">
-                    Email:
-                  </span>
-                  <span className="text-gray-700 dark:text-gray-300">
-                    suporte@meusgastos.app
-                  </span>
-                </div>
-
-                <div>
-                  <span className="block font-medium text-gray-900 dark:text-white">
-                    Telefone:
-                  </span>
-                  <span className="text-gray-700 dark:text-gray-300">
-                    (11) 4000-1234
-                  </span>
-                </div>
-
-                <div>
-                  <span className="block font-medium text-gray-900 dark:text-white">
-                    Horário de atendimento:
-                  </span>
-                  <span className="text-gray-700 dark:text-gray-300">
-                    Segunda a sexta, 9h às 18h
-                  </span>
-                </div>
-
+              <div>
+                <span className="block font-medium">Horário:</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  Segunda a sexta, 9h às 18h
+                </span>
+              </div>
             </div>
 
             <ContactForm />
-          </div>            
-          <div className="mt-8 flex gap-2 ">
-            <FaInstagram /> <FaWhatsapp />
+          </div>
+
+          <div className="mt-8 flex items-center gap-4 text-2xl text-gray-700 dark:text-gray-200">
+            <a
+              href="#"
+              aria-label="Instagram"
+              className="hover:text-green-600 dark:hover:text-green-400 transition"
+            >
+              <FaInstagram />
+            </a>
+            <a
+              href="#"
+              aria-label="WhatsApp"
+              className="hover:text-green-600 dark:hover:text-green-400 transition"
+            >
+              <FaWhatsapp />
+            </a>
           </div>
         </section>
       </main>
-    </div>
+    </AppLayout>
   );
 };
+
+export default Contato;
