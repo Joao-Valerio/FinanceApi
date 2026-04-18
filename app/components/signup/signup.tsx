@@ -33,33 +33,21 @@ const SignUp = () => {
             type="text"
             placeholder="Nome"
             aria-label="Digite seu nome"
-<<<<<<< HEAD
             className="w-full mb-4 px-4 py-3 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
-=======
-            className="w-full mb-4 px-4 py-3 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
->>>>>>> a3f6e489cb38d454626ead9f3ba6f11c218f500c
           />
 
           <input
             type="email"
             placeholder="Email"
             aria-label="Digite seu email"
-<<<<<<< HEAD
             className="w-full mb-4 px-4 py-3 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
-=======
-            className="w-full mb-4 px-4 py-3 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
->>>>>>> a3f6e489cb38d454626ead9f3ba6f11c218f500c
           />
 
           <input
             type="password"
             placeholder="Senha"
             aria-label="Digite sua senha"
-<<<<<<< HEAD
             className="w-full mb-6 px-4 py-3 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
-=======
-            className="w-full mb-6 px-4 py-3 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
->>>>>>> a3f6e489cb38d454626ead9f3ba6f11c218f500c
           />
 
           <button
