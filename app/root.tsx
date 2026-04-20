@@ -10,6 +10,7 @@ import {
 import type { LinksFunction } from "react-router";
 
 import stylesheet from "./app.css?url";
+import { AuthProvider } from "./lib/auth";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -77,7 +78,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <AuthProvider>
+      <Outlet />
+    </AuthProvider>
+  );
 }
 
 export function ErrorBoundary() {
