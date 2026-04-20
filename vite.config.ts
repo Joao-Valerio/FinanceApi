@@ -4,9 +4,23 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [
-    tailwindcss(), 
-    reactRouter(), 
-    tsconfigPaths()
-  ],
+  plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+  optimizeDeps: {
+    include: [
+      "react",
+      "react-dom",
+      "react-dom/client",
+      "react/jsx-runtime",
+      "react/jsx-dev-runtime",
+      "react-router",
+      "@fortawesome/fontawesome-svg-core",
+      "@fortawesome/free-solid-svg-icons",
+      "@fortawesome/react-fontawesome",
+      "@radix-ui/react-select",
+      "@tanstack/react-table",
+      "lucide-react",
+      "react-icons",
+      "recharts",
+    ],
+  },
 });
