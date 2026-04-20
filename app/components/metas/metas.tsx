@@ -22,13 +22,16 @@ export type Meta = {
 const calcProgresso = (meta: Meta) =>
   Math.min(100, Math.round((meta.atual / meta.objetivo) * 100));
 
+const [titulo, setTitulo] = useState("");
+const [objetivo, setObjetivo] = useState(0);
+const [prazo, setPrazo] = useState("");
+
 function formatarBRL(valor: number): string {
   return valor.toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
   });
 }
-
 
 
 const Metas = () => {
@@ -58,6 +61,26 @@ const Metas = () => {
     fetchMetas();
   }, [user]);
 
+  async function handleSubmit(e: FormEvent) {
+  try {
+    await api("/metas", {
+      method: "POST",
+      body: {
+        titulo,
+        objetivo,
+        prazo,
+      },
+    });
+
+    fetchMetas();
+
+    setTitulo("");
+    setObjetivo(0);
+    setPrazo("");
+  } catch (err) {
+    console.error(err);
+  }
+}
 
   return (
     <AppLayout>
@@ -119,18 +142,27 @@ const Metas = () => {
 
         <section className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-6 rounded-2xl shadow-sm">
           <h2 className="text-lg sm:text-xl font-bold mb-4">Criar nova meta</h2>
-          <form className="space-y-3">
+          <form onSubmit={handleSubmit} className="space-y-3">
             <input
+              value={titulo}
+              onChange={(e) => setTitulo(e.target.value)}
               type="text"
               placeholder="Nome da meta (ex: Reserva de emergência)"
               className="w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <input
+              value={objetivo}
+              onChange={(e) => setObjetivo(Number(e.target.value))}
               type="number"
+              min={0}
+              step={0.01}
               placeholder="Valor objetivo (R$)"
               className="w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <input
+              value={prazo}
+              required
+              onChange={(e) => setPrazo(e.target.value)}
               type="month"
               aria-label="Prazo da meta"
               className="w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
