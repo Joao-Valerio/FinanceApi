@@ -1,4 +1,8 @@
 import { AppLayout } from "../layout/AppLayout";
+import { useEffect, type FormEvent, useState } from "react";
+import { useAuth } from "~/lib/auth";
+import { api, ApiError } from "../../lib/api";
+
 import {
   Card,
   CardContent,
@@ -25,8 +29,35 @@ function formatarBRL(valor: number): string {
   });
 }
 
+
+
 const Metas = () => {
-  const metas: Meta[] = [];
+  const [metas, setMetas] = useState<Meta[]>([]);
+  const [carregando, setCarregando] = useState(true);
+  const { user } = useAuth();
+
+  async function fetchMetas() {
+    try {
+      setCarregando(true);
+
+      const data = await api<Meta[]>("/metas");
+      setMetas(data);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        console.error(err.message);
+      } else {
+        console.error(err);
+      }
+    } finally {
+      setCarregando(false);
+    }
+  }
+
+  useEffect(() => {
+    if (!user) return;
+    fetchMetas();
+  }, [user]);
+
 
   return (
     <AppLayout>
