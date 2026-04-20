@@ -13,13 +13,23 @@ const navItems: NavItem[] = [
   { to: "/gastos", label: "Gastos" },
   { to: "/metas", label: "Metas" },
   { to: "/relatorios", label: "Relatórios" },
+  { to: "/perfil", label: "Meu perfil" },
   { to: "/recursos", label: "Recursos" },
   { to: "/sobre", label: "Sobre" },
   { to: "/contato", label: "Contato" },
 ];
 
+function getIniciais(nome: string): string {
+  const partes = nome.trim().split(/\s+/).filter(Boolean);
+  if (partes.length === 0) return "?";
+  if (partes.length === 1) return partes[0].charAt(0).toUpperCase();
+  return (partes[0].charAt(0) + partes[partes.length - 1].charAt(0)).toUpperCase();
+}
+
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const { pathname } = useLocation();
+
+  const usuario: { nome: string; email: string } | null = null;
 
   return (
     <>
@@ -89,21 +99,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             Sair
           </Link>
 
-          <div className="flex items-center gap-3">
-            <img
-              src="https://i.pravatar.cc/100?u=joao"
-              alt="Foto de Joao"
-              className="w-10 h-10 rounded-full border-2 border-green-500"
-            />
+          <Link
+            to="/perfil"
+            onClick={onClose}
+            className="flex items-center gap-3 rounded-lg p-2 -m-2 hover:bg-green-100 dark:hover:bg-green-900/40 transition"
+            aria-label="Ir para meu perfil"
+          >
+            <div className="w-10 h-10 rounded-full bg-green-600 text-white flex items-center justify-center font-bold border-2 border-green-500 shrink-0">
+              {getIniciais(usuario?.nome ?? "")}
+            </div>
             <div className="min-w-0">
               <p className="text-sm font-bold text-gray-800 dark:text-white truncate">
-                Joao
+                {usuario?.nome ?? "Visitante"}
               </p>
               <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                Usuário Premium
+                {usuario?.email ?? "Entre na sua conta"}
               </p>
             </div>
-          </div>
+          </Link>
         </div>
       </aside>
     </>

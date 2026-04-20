@@ -25,6 +25,7 @@ import {
 } from "@tanstack/react-table";
 
 export type Gasto = {
+  id: string;
   descricao: string;
   valor: number;
   data: string;
@@ -36,26 +37,12 @@ export type ChartDataGasto = {
   gastos: number;
 };
 
-const dados: Gasto[] = [
-  {
-    descricao: "Conta de luz",
-    valor: 150.75,
-    data: "2024-09-01",
-    categoria: "Serviços",
-  },
-  {
-    descricao: "Supermercado",
-    valor: 230.1,
-    data: "2024-09-05",
-    categoria: "Alimentação",
-  },
-  {
-    descricao: "Assinatura streaming",
-    valor: 29.9,
-    data: "2024-09-10",
-    categoria: "Entretenimento",
-  },
-];
+function formatarBRL(valor: number): string {
+  return valor.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+}
 
 const columnHelper = createColumnHelper<Gasto>();
 
@@ -66,7 +53,7 @@ const columns: ColumnDef<Gasto, any>[] = [
   }),
   columnHelper.accessor("valor", {
     header: "Valor",
-    cell: (info) => <span>R$ {info.getValue().toFixed(2)}</span>,
+    cell: (info) => <span>{formatarBRL(info.getValue())}</span>,
   }),
   columnHelper.accessor("data", {
     header: "Data",
@@ -79,6 +66,8 @@ const columns: ColumnDef<Gasto, any>[] = [
 ];
 
 export function TabelaGastos() {
+  const dados: Gasto[] = [];
+
   const table = useReactTable({
     data: dados,
     columns,
@@ -110,21 +99,35 @@ export function TabelaGastos() {
             ))}
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
-            {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className="transition-colors hover:bg-green-50 dark:hover:bg-green-900/30"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="px-4 sm:px-6 py-3 whitespace-nowrap"
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
+            {table.getRowModel().rows.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={columns.length}
+                  className="px-4 sm:px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400"
+                >
+                  Nenhum gasto registrado ainda.
+                </td>
               </tr>
-            ))}
+            ) : (
+              table.getRowModel().rows.map((row) => (
+                <tr
+                  key={row.id}
+                  className="transition-colors hover:bg-green-50 dark:hover:bg-green-900/30"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={cell.id}
+                      className="px-4 sm:px-6 py-3 whitespace-nowrap"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -134,19 +137,6 @@ export function TabelaGastos() {
 
 export const description = "Gráfico de gastos do cliente";
 
-const chartData: ChartDataGasto[] = [
-  { date: "2024-04-01", gastos: 222 },
-  { date: "2024-04-02", gastos: 97 },
-  { date: "2024-04-03", gastos: 167 },
-  { date: "2024-04-04", gastos: 242 },
-  { date: "2024-04-05", gastos: 373 },
-  { date: "2024-04-06", gastos: 301 },
-  { date: "2024-04-07", gastos: 245 },
-  { date: "2024-04-08", gastos: 409 },
-  { date: "2024-04-09", gastos: 59 },
-  { date: "2024-04-10", gastos: 261 },
-];
-
 const chartConfig = {
   gastos: {
     label: "Gastos do Cliente",
@@ -155,19 +145,20 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function ChartLineGastosCliente() {
+  const chartData: ChartDataGasto[] = [];
+  const saldo: number | null = null;
+
   const total = React.useMemo(
     () => chartData.reduce((acc, curr) => acc + curr.gastos, 0),
-    []
+    [chartData]
   );
-
-  const saldo = 1250;
 
   return (
     <Card className="py-4 bg-gray-100 dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white">
       <div className="px-6 mb-2">
         <span className="text-2xl sm:text-3xl font-bold">Saldo atual</span>
         <p className="text-2xl sm:text-3xl font-semibold text-green-600 dark:text-green-400 mt-1">
-          R$ {saldo.toLocaleString("pt-BR")}
+          {saldo === null ? "—" : formatarBRL(saldo)}
         </p>
       </div>
 
@@ -184,60 +175,66 @@ export function ChartLineGastosCliente() {
               Total de Gastos
             </span>
             <span className="text-lg leading-none font-bold sm:text-3xl">
-              R$ {total.toLocaleString("pt-BR")}
+              {formatarBRL(total)}
             </span>
           </div>
         </div>
       </CardHeader>
 
       <CardContent className="px-2 sm:p-6">
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto h-[220px] sm:h-[260px] w-full"
-        >
-          <LineChart
-            accessibilityLayer
-            data={chartData}
-            margin={{ left: 12, right: 12 }}
+        {chartData.length === 0 ? (
+          <div className="flex items-center justify-center h-[220px] sm:h-[260px] text-center text-sm text-gray-500 dark:text-gray-400">
+            Sem dados de gastos para exibir.
+          </div>
+        ) : (
+          <ChartContainer
+            config={chartConfig}
+            className="aspect-auto h-[220px] sm:h-[260px] w-full"
           >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              minTickGap={32}
-              tickFormatter={(value) =>
-                new Date(value).toLocaleDateString("pt-BR", {
-                  month: "short",
-                  day: "numeric",
-                })
-              }
-            />
-            <ChartTooltip
-              content={
-                <ChartTooltipContent
-                  className="w-[150px]"
-                  nameKey="gastos"
-                  labelFormatter={(value) =>
-                    new Date(value).toLocaleDateString("pt-BR", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })
-                  }
-                />
-              }
-            />
-            <Line
-              dataKey="gastos"
-              type="monotone"
-              stroke="#22c55e"
-              strokeWidth={2}
-              dot={false}
-            />
-          </LineChart>
-        </ChartContainer>
+            <LineChart
+              accessibilityLayer
+              data={chartData}
+              margin={{ left: 12, right: 12 }}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="date"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                minTickGap={32}
+                tickFormatter={(value) =>
+                  new Date(value).toLocaleDateString("pt-BR", {
+                    month: "short",
+                    day: "numeric",
+                  })
+                }
+              />
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent
+                    className="w-[150px]"
+                    nameKey="gastos"
+                    labelFormatter={(value) =>
+                      new Date(value).toLocaleDateString("pt-BR", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })
+                    }
+                  />
+                }
+              />
+              <Line
+                dataKey="gastos"
+                type="monotone"
+                stroke="#22c55e"
+                strokeWidth={2}
+                dot={false}
+              />
+            </LineChart>
+          </ChartContainer>
+        )}
       </CardContent>
     </Card>
   );

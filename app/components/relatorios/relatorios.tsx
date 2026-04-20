@@ -10,14 +10,33 @@ import {
 
 type Periodo = "mensal" | "trimestral" | "anual";
 
+type ResumoCategoria = {
+  categoria: string;
+  total: number;
+  percentual: number;
+};
+
 const periodos: { id: Periodo; label: string }[] = [
   { id: "mensal", label: "Mensal" },
   { id: "trimestral", label: "Trimestral" },
   { id: "anual", label: "Anual" },
 ];
 
+function formatarBRL(valor: number | null): string {
+  if (valor === null) return "—";
+  return valor.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+}
+
 const Relatorios = () => {
   const [periodo, setPeriodo] = useState<Periodo>("mensal");
+
+  const entradas: number | null = null;
+  const saidas: number | null = null;
+  const saldoFinal: number | null = null;
+  const resumoCategorias: ResumoCategoria[] = [];
 
   return (
     <AppLayout>
@@ -55,7 +74,7 @@ const Relatorios = () => {
             </CardHeader>
             <CardContent>
               <p className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400">
-                R$ 8.750,00
+                {formatarBRL(entradas)}
               </p>
             </CardContent>
           </Card>
@@ -67,7 +86,7 @@ const Relatorios = () => {
             </CardHeader>
             <CardContent>
               <p className="text-xl sm:text-2xl font-bold text-red-500">
-                R$ 5.430,00
+                {formatarBRL(saidas)}
               </p>
             </CardContent>
           </Card>
@@ -79,7 +98,7 @@ const Relatorios = () => {
             </CardHeader>
             <CardContent>
               <p className="text-xl sm:text-2xl font-bold text-blue-500">
-                R$ 3.320,00
+                {formatarBRL(saldoFinal)}
               </p>
             </CardContent>
           </Card>
@@ -98,26 +117,29 @@ const Relatorios = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-gray-200 dark:border-gray-800">
-                <td className="py-2">Alimentação</td>
-                <td className="py-2 text-right">R$ 1.250,00</td>
-                <td className="py-2 text-right">23%</td>
-              </tr>
-              <tr className="border-b border-gray-200 dark:border-gray-800">
-                <td className="py-2">Transporte</td>
-                <td className="py-2 text-right">R$ 600,00</td>
-                <td className="py-2 text-right">11%</td>
-              </tr>
-              <tr className="border-b border-gray-200 dark:border-gray-800">
-                <td className="py-2">Contas fixas</td>
-                <td className="py-2 text-right">R$ 1.800,00</td>
-                <td className="py-2 text-right">33%</td>
-              </tr>
-              <tr>
-                <td className="py-2">Lazer</td>
-                <td className="py-2 text-right">R$ 450,00</td>
-                <td className="py-2 text-right">8%</td>
-              </tr>
+              {resumoCategorias.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={3}
+                    className="py-6 text-center text-gray-500 dark:text-gray-400"
+                  >
+                    Sem dados para o período selecionado.
+                  </td>
+                </tr>
+              ) : (
+                resumoCategorias.map((linha) => (
+                  <tr
+                    key={linha.categoria}
+                    className="border-b border-gray-200 dark:border-gray-800"
+                  >
+                    <td className="py-2">{linha.categoria}</td>
+                    <td className="py-2 text-right">
+                      {formatarBRL(linha.total)}
+                    </td>
+                    <td className="py-2 text-right">{linha.percentual}%</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </section>

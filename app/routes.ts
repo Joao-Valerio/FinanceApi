@@ -10,6 +10,7 @@ export default [
     route("gastos", "routes/gastos.tsx"),
     route("metas", "routes/metas.tsx"),
     route("relatorios", "routes/relatorios.tsx"),
+    route("perfil", "routes/perfil.tsx"),
     route("recursos", "routes/recursos.tsx"),
     route("contato", "routes/contato.tsx"),
   ]),
