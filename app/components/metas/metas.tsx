@@ -22,9 +22,6 @@ export type Meta = {
 const calcProgresso = (meta: Meta) =>
   Math.min(100, Math.round((meta.atual / meta.objetivo) * 100));
 
-const [titulo, setTitulo] = useState("");
-const [objetivo, setObjetivo] = useState(0);
-const [prazo, setPrazo] = useState("");
 
 function formatarBRL(valor: number): string {
   return valor.toLocaleString("pt-BR", {
@@ -38,6 +35,10 @@ const Metas = () => {
   const [metas, setMetas] = useState<Meta[]>([]);
   const [carregando, setCarregando] = useState(true);
   const { user } = useAuth();
+  const [titulo, setTitulo] = useState("");
+  const [objetivo, setObjetivo] = useState(0);
+  const [prazo, setPrazo] = useState("");
+  const [depositos, setDepositos] = useState<Record<string, number>>({});
 
   async function fetchMetas() {
     try {
@@ -62,25 +63,50 @@ const Metas = () => {
   }, [user]);
 
   async function handleSubmit(e: FormEvent) {
-  try {
-    await api("/metas", {
-      method: "POST",
-      body: {
-        titulo,
-        objetivo,
-        prazo,
-      },
-    });
+    try {
+      await api("/metas", {
+        method: "POST",
+        body: {
+          titulo,
+          objetivo,
+          prazo,
+        },
+      });
 
-    fetchMetas();
+      fetchMetas();
 
-    setTitulo("");
-    setObjetivo(0);
-    setPrazo("");
-  } catch (err) {
-    console.error(err);
+      setTitulo("");
+      setObjetivo(0);
+      setPrazo("");
+    } catch (err) {
+      console.error(err);
+    }
   }
-}
+
+  async function handleDepositar(id: string) {
+    const valor = depositos[id];
+
+    if (!valor || valor <= 0) {
+      alert("Digite um valor válido");
+      return;
+    }
+
+    try {
+      await api(`/metas/${id}/depositar`, {
+        method: "PATCH",
+        body: { valor },
+      });
+
+      fetchMetas();
+
+      setDepositos((prev) => ({
+        ...prev,
+        [id]: 0,
+      }));
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
     <AppLayout>
@@ -132,6 +158,29 @@ const Metas = () => {
                       <p className="text-xs text-gray-600 dark:text-gray-300">
                         Progresso: {progresso}%
                       </p>
+                      <div className="mt-3 flex gap-2">
+                        <input
+                          type="number"
+                          placeholder="Valor"
+                          value={depositos[meta.id] ?? ""}
+                          onChange={(e) => {
+                            const value = e.target.value;
+
+                            setDepositos((prev) => ({
+                              ...prev,
+                              [meta.id]: value === "" ? 0 : Number(value),
+                            }));
+                          }}
+                          className="w-full p-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800"
+                        />
+
+                        <button
+                          onClick={() => handleDepositar(meta.id)}
+                          className="bg-green-600 hover:bg-green-700 text-white px-3 rounded-lg"
+                        >
+                          Depositar
+                        </button>
+                      </div>
                     </CardContent>
                   </Card>
                 );
