@@ -1,12 +1,34 @@
 import { Link, useNavigate } from "react-router";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
+import { useAuth } from "../../lib/auth";
+import { ApiError } from "../../lib/api";
 
 export function Login() {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
+  const { login } = useAuth();
 
-  function handleSignUp() {
-    navigate("/dashboard");
+  const [isOpen, setIsOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState<string | null>(null);
+
+  async function handleLogin(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setErro(null);
+    setLoading(true);
+    try {
+      await login(email, senha);
+      navigate("/dashboard");
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setErro(err.message);
+      } else {
+        setErro("Não foi possível entrar. Tente novamente.");
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -30,11 +52,17 @@ export function Login() {
       <main className="px-4 sm:px-8 pb-10">
         <h1 className="text-4xl sm:text-5xl font-bold text-center">Login</h1>
 
-        <div className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-sm w-full max-w-md mx-auto mt-6">
+        <form
+          onSubmit={handleLogin}
+          className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-sm w-full max-w-md mx-auto mt-6"
+        >
           <input
             type="email"
             placeholder="Email"
             aria-label="Digite seu email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
             className="w-full mb-4 px-4 py-3 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
 
@@ -42,15 +70,27 @@ export function Login() {
             type="password"
             placeholder="Senha"
             aria-label="Digite sua senha"
-            className="w-full mb-6 px-4 py-3 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+            required
+            className="w-full mb-4 px-4 py-3 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
 
+          {erro && (
+            <p
+              role="alert"
+              className="mb-4 px-3 py-2 rounded-md text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-300 border border-red-300 dark:border-red-800"
+            >
+              {erro}
+            </p>
+          )}
+
           <button
-            type="button"
-            onClick={handleSignUp}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-md transition"
+            type="submit"
+            disabled={loading}
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-md transition disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Entrar
+            {loading ? "Entrando..." : "Entrar"}
           </button>
 
           <button
@@ -99,7 +139,7 @@ export function Login() {
               </div>
             </div>
           )}
-        </div>
+        </form>
       </main>
     </div>
   );

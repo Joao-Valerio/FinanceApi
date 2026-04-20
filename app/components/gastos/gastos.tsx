@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AppLayout } from "../layout/AppLayout";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 import type { ChartConfig } from "../ui/chart";
 import type { ColumnDef } from "@tanstack/react-table";
+import { api } from "../../lib/api";
 
 import {
   Card,
@@ -37,6 +38,20 @@ export type ChartDataGasto = {
   gastos: number;
 };
 
+type TransacaoApi = {
+  id: string;
+  descricao: string;
+  valor: string | number;
+  data: string;
+  categoria: { nome: string } | null;
+};
+
+type SaldoResponse = {
+  saldoAtual: number;
+  totalEntradas: number;
+  totalSaidas: number;
+};
+
 function formatarBRL(valor: number): string {
   return valor.toLocaleString("pt-BR", {
     style: "currency",
@@ -66,7 +81,35 @@ const columns: ColumnDef<Gasto, any>[] = [
 ];
 
 export function TabelaGastos() {
-  const dados: Gasto[] = [];
+  const [dados, setDados] = useState<Gasto[]>([]);
+  const [carregando, setCarregando] = useState(true);
+
+  useEffect(() => {
+    let cancelado = false;
+
+    api<TransacaoApi[]>("/transacoes?tipo=SAIDA&limit=200")
+      .then((lista) => {
+        if (cancelado) return;
+        const convertido: Gasto[] = lista.map((t) => ({
+          id: t.id,
+          descricao: t.descricao,
+          valor: Number(t.valor),
+          data: t.data,
+          categoria: t.categoria?.nome ?? "Sem categoria",
+        }));
+        setDados(convertido);
+      })
+      .catch(() => {
+        if (!cancelado) setDados([]);
+      })
+      .finally(() => {
+        if (!cancelado) setCarregando(false);
+      });
+
+    return () => {
+      cancelado = true;
+    };
+  }, []);
 
   const table = useReactTable({
     data: dados,
@@ -99,7 +142,16 @@ export function TabelaGastos() {
             ))}
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
-            {table.getRowModel().rows.length === 0 ? (
+            {carregando ? (
+              <tr>
+                <td
+                  colSpan={columns.length}
+                  className="px-4 sm:px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400"
+                >
+                  Carregando...
+                </td>
+              </tr>
+            ) : table.getRowModel().rows.length === 0 ? (
               <tr>
                 <td
                   colSpan={columns.length}
@@ -145,8 +197,36 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function ChartLineGastosCliente() {
-  const chartData: ChartDataGasto[] = [];
-  const saldo: number | null = null;
+  const [chartData, setChartData] = useState<ChartDataGasto[]>([]);
+  const [saldo, setSaldo] = useState<number | null>(null);
+  const [carregando, setCarregando] = useState(true);
+
+  useEffect(() => {
+    let cancelado = false;
+
+    Promise.all([
+      api<ChartDataGasto[]>("/relatorios/gastos-periodo?range=90d"),
+      api<SaldoResponse>("/relatorios/saldo"),
+    ])
+      .then(([gastos, saldoResp]) => {
+        if (cancelado) return;
+        setChartData(gastos);
+        setSaldo(saldoResp.saldoAtual);
+      })
+      .catch(() => {
+        if (!cancelado) {
+          setChartData([]);
+          setSaldo(null);
+        }
+      })
+      .finally(() => {
+        if (!cancelado) setCarregando(false);
+      });
+
+    return () => {
+      cancelado = true;
+    };
+  }, []);
 
   const total = React.useMemo(
     () => chartData.reduce((acc, curr) => acc + curr.gastos, 0),
@@ -158,7 +238,7 @@ export function ChartLineGastosCliente() {
       <div className="px-6 mb-2">
         <span className="text-2xl sm:text-3xl font-bold">Saldo atual</span>
         <p className="text-2xl sm:text-3xl font-semibold text-green-600 dark:text-green-400 mt-1">
-          {saldo === null ? "—" : formatarBRL(saldo)}
+          {carregando ? "..." : saldo === null ? "—" : formatarBRL(saldo)}
         </p>
       </div>
 
@@ -182,7 +262,11 @@ export function ChartLineGastosCliente() {
       </CardHeader>
 
       <CardContent className="px-2 sm:p-6">
-        {chartData.length === 0 ? (
+        {carregando ? (
+          <div className="flex items-center justify-center h-[220px] sm:h-[260px] text-sm text-gray-500 dark:text-gray-400">
+            Carregando...
+          </div>
+        ) : chartData.length === 0 ? (
           <div className="flex items-center justify-center h-[220px] sm:h-[260px] text-center text-sm text-gray-500 dark:text-gray-400">
             Sem dados de gastos para exibir.
           </div>

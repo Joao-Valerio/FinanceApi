@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import type { ChartConfig } from "../ui/chart";
 import { AppLayout } from "../layout/AppLayout";
+import { api, ApiError } from "../../lib/api";
 
 import {
   Card,
@@ -39,6 +40,12 @@ export type Transacao = {
   data: string;
 };
 
+type SaldoResponse = {
+  saldoAtual: number;
+  totalEntradas: number;
+  totalSaidas: number;
+};
+
 const chartConfig = {
   Entradas: { label: "Entradas", color: "#16a34a" },
   Saídas: { label: "Saídas", color: "#dc2626" },
@@ -64,9 +71,28 @@ function formatarBRL(valor: number): string {
 
 export function ChartAreaInteractive() {
   const isMobile = useIsMobile();
-  const [timeRange, setTimeRange] = useState("90d");
+  const [timeRange, setTimeRange] = useState<"7d" | "30d" | "90d">("90d");
+  const [chartData, setChartData] = useState<ChartDataItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const chartData: ChartDataItem[] = [];
+  useEffect(() => {
+    let cancelado = false;
+    setLoading(true);
+    api<ChartDataItem[]>(`/relatorios/fluxo?range=${timeRange}`)
+      .then((dados) => {
+        if (!cancelado) setChartData(dados);
+      })
+      .catch(() => {
+        if (!cancelado) setChartData([]);
+      })
+      .finally(() => {
+        if (!cancelado) setLoading(false);
+      });
+    return () => {
+      cancelado = true;
+    };
+  }, [timeRange]);
+
   const filteredData = chartData;
 
   const timeRangeLabels: Record<string, string> = {
@@ -105,7 +131,11 @@ export function ChartAreaInteractive() {
         </Select>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        {filteredData.length === 0 ? (
+        {loading ? (
+          <div className="flex items-center justify-center h-[240px] sm:h-[280px] text-sm text-gray-500 dark:text-gray-400">
+            Carregando...
+          </div>
+        ) : filteredData.length === 0 ? (
           <div className="flex items-center justify-center h-[240px] sm:h-[280px] text-center text-sm text-gray-500 dark:text-gray-400">
             Sem dados para exibir no período selecionado.
           </div>
@@ -182,8 +212,65 @@ export function ChartAreaInteractive() {
 }
 
 export const Dashboard: React.FC = () => {
-  const saldo: number | null = null;
-  const transacoes: Transacao[] = [];
+  const [saldo, setSaldo] = useState<number | null>(null);
+  const [transacoes, setTransacoes] = useState<Transacao[]>([]);
+  const [carregando, setCarregando] = useState(true);
+
+  const [descricao, setDescricao] = useState("");
+  const [valor, setValor] = useState("");
+  const [tipo, setTipo] = useState<"ENTRADA" | "SAIDA">("ENTRADA");
+  const [salvando, setSalvando] = useState(false);
+  const [erro, setErro] = useState<string | null>(null);
+
+  async function carregarTudo() {
+    setCarregando(true);
+    try {
+      const [saldoResp, listaResp] = await Promise.all([
+        api<SaldoResponse>("/relatorios/saldo"),
+        api<Transacao[]>("/transacoes?limit=10"),
+      ]);
+      setSaldo(saldoResp.saldoAtual);
+      setTransacoes(listaResp);
+    } catch {
+      setSaldo(null);
+      setTransacoes([]);
+    } finally {
+      setCarregando(false);
+    }
+  }
+
+  useEffect(() => {
+    carregarTudo();
+  }, []);
+
+  async function handleAdicionar(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setErro(null);
+    setSalvando(true);
+    try {
+      await api<Transacao>("/transacoes", {
+        method: "POST",
+        body: {
+          descricao,
+          valor: Number(valor),
+          tipo,
+          data: new Date().toISOString(),
+        },
+      });
+      setDescricao("");
+      setValor("");
+      setTipo("ENTRADA");
+      await carregarTudo();
+    } catch (err) {
+      setErro(
+        err instanceof ApiError
+          ? err.message
+          : "Não foi possível adicionar a transação."
+      );
+    } finally {
+      setSalvando(false);
+    }
+  }
 
   return (
     <AppLayout>
@@ -191,7 +278,7 @@ export const Dashboard: React.FC = () => {
         <section className="md:col-span-1 bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-6 rounded-2xl shadow-sm flex flex-col justify-center min-h-[160px]">
           <h3 className="text-2xl sm:text-3xl font-bold mb-1">Saldo atual</h3>
           <p className="text-3xl sm:text-4xl font-semibold text-green-600 dark:text-green-400">
-            {saldo === null ? "—" : formatarBRL(saldo)}
+            {carregando ? "..." : saldo === null ? "—" : formatarBRL(saldo)}
           </p>
         </section>
 
@@ -199,29 +286,51 @@ export const Dashboard: React.FC = () => {
           <h3 className="text-lg sm:text-xl font-bold mb-4">
             Adicionar transação
           </h3>
-          <form className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <form
+            onSubmit={handleAdicionar}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+          >
             <input
               type="text"
               placeholder="Descrição"
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+              required
               className="w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <input
               type="number"
+              step="0.01"
+              min="0.01"
               placeholder="Valor"
+              value={valor}
+              onChange={(e) => setValor(e.target.value)}
+              required
               className="w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <select
+              value={tipo}
+              onChange={(e) => setTipo(e.target.value as "ENTRADA" | "SAIDA")}
               className="sm:col-span-2 w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
               aria-label="Tipo de transação"
             >
-              <option value="entrada">Entrada</option>
-              <option value="saida">Saída</option>
+              <option value="ENTRADA">Entrada</option>
+              <option value="SAIDA">Saída</option>
             </select>
+            {erro && (
+              <p
+                role="alert"
+                className="sm:col-span-2 px-3 py-2 rounded-md text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-300 border border-red-300 dark:border-red-800"
+              >
+                {erro}
+              </p>
+            )}
             <button
               type="submit"
-              className="sm:col-span-2 w-full bg-green-600 hover:bg-green-700 text-white p-2 rounded-xl font-semibold transition"
+              disabled={salvando}
+              className="sm:col-span-2 w-full bg-green-600 hover:bg-green-700 text-white p-2 rounded-xl font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              Adicionar
+              {salvando ? "Salvando..." : "Adicionar"}
             </button>
           </form>
         </section>
@@ -230,7 +339,11 @@ export const Dashboard: React.FC = () => {
           <h3 className="text-lg sm:text-xl font-bold mb-4">
             Histórico de transações
           </h3>
-          {transacoes.length === 0 ? (
+          {carregando ? (
+            <p className="text-sm text-gray-500 dark:text-gray-400 py-6 text-center">
+              Carregando...
+            </p>
+          ) : transacoes.length === 0 ? (
             <p className="text-sm text-gray-500 dark:text-gray-400 py-6 text-center">
               Nenhuma transação registrada ainda.
             </p>
