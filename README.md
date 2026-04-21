@@ -1,87 +1,134 @@
-# Welcome to React Router!
+# FinanceApp
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Aplicacao full stack para gestao financeira pessoal, com painel de saldo, controle de transacoes, metas, categorias e relatorios por periodo.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Visao Geral
 
-## Features
+O projeto e dividido em:
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+- **Frontend:** interface web com React Router, Vite e Tailwind CSS.
+- **Backend:** API REST com Express, Prisma e PostgreSQL.
+- **Autenticacao:** login com JWT para proteger rotas privadas.
 
-## Getting Started
+## Tecnologias Utilizadas
 
-### Installation
+### Frontend
 
-Install the dependencies:
+- React 18 + React Router 7
+- TypeScript
+- Vite
+- Tailwind CSS
+- Recharts (graficos)
+- Radix UI
+
+### Backend
+
+- Node.js + Express
+- TypeScript
+- Prisma ORM
+- PostgreSQL
+- Zod (validacao)
+- JWT + bcrypt (autenticacao e seguranca)
+
+## Pre-requisitos
+
+Antes de iniciar, tenha instalado:
+
+- Node.js 20 ou superior
+- npm 9 ou superior
+- Docker Desktop (recomendado para banco local)
+- Git
+
+## Instalacao e Uso (Passo a Passo)
+
+### 1) Clonar o repositorio
+
+```bash
+git clone <url-do-repositorio>
+cd FinanceApp
+```
+
+### 2) Instalar dependencias do frontend
 
 ```bash
 npm install
 ```
 
-### Development
+### 3) Configurar e iniciar o backend
 
-Start the development server with HMR:
+```bash
+cd server
+npm install
+docker compose up -d
+copy .env.example .env
+npm run prisma:migrate
+npm run db:seed
+npm run dev
+```
+
+A API sera iniciada em `http://localhost:3333`.
+
+### 4) Iniciar o frontend
+
+Em outro terminal, na raiz do projeto:
 
 ```bash
 npm run dev
 ```
 
-Your application will be available at `http://localhost:5173`.
+Aplicacao web disponivel em `http://localhost:5173`.
 
-## Building for Production
+## Variaveis de Ambiente
 
-Create a production build:
+### Frontend (`.env.local`)
 
-```bash
-npm run build
+```env
+VITE_API_URL=http://localhost:3333/api
 ```
 
-## Deployment
+### Backend (`server/.env`)
 
-### Docker Deployment
+Use o `server/.env.example` como base. Campos principais:
 
-To build and run using Docker:
+- `PORT`
+- `FRONTEND_URL`
+- `DATABASE_URL`
+- `JWT_SECRET`
+- `JWT_EXPIRES_IN`
 
-```bash
-docker build -t my-app .
+## Exemplos de Funcionamento (Imagens/GIFs)
 
-# Run the container
-docker run -p 3000:3000 my-app
-```
+Adicione capturas na pasta `docs/images/` e atualize os caminhos abaixo:
 
-The containerized application can be deployed to any platform that supports Docker, including:
+![Tela de Dashboard](docs/images/dashboard.png)
+![Fluxo de cadastro e login](docs/images/auth-flow.gif)
+![Relatorios de gastos](docs/images/relatorios.gif)
 
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
+## Scripts Uteis
 
-### DIY Deployment
+### Frontend (raiz)
 
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
+- `npm run dev` - inicia ambiente de desenvolvimento
+- `npm run build` - gera build de producao
+- `npm run start` - executa build de producao
+- `npm run typecheck` - valida tipos TypeScript
 
-Make sure to deploy the output of `npm run build`
+### Backend (`server`)
 
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
+- `npm run dev` - inicia API com hot reload
+- `npm run build` - compila TypeScript
+- `npm run start` - executa API compilada
+- `npm run prisma:migrate` - cria/aplica migrations
+- `npm run prisma:studio` - abre Prisma Studio
+- `npm run db:seed` - popula dados iniciais
 
-## Styling
+## Contato
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+Para duvidas, sugestoes ou contribuicoes:
 
----
+- Abra uma issue neste repositorio
+- Envie um pull request com melhorias
 
-Built with ❤️ using React Router.
+## Licenca
+
+Este projeto ainda nao possui uma licenca definida. Recomenda-se adicionar um arquivo `LICENSE` (ex.: MIT) para uso em producao ou contribuicoes abertas.
