@@ -5,3 +5,9 @@
 /.react-router/
 /build/
 node_modules
+
+# Variáveis de ambiente (nunca subir para o repositório)
+.env
+.env.local
+.env.*.local
+server/.env
