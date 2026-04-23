@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AppLayout } from "../layout/AppLayout";
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import type { ChartConfig } from "../ui/chart";
 import type { ColumnDef } from "@tanstack/react-table";
 import { api } from "../../lib/api";
@@ -191,8 +191,8 @@ export const description = "Gráfico de gastos do cliente";
 
 const chartConfig = {
   gastos: {
-    label: "Gastos do Cliente",
-    color: "var(--chart-1)",
+    label: "Gastos",
+    color: "#dc2626",
   },
 } satisfies ChartConfig;
 
@@ -273,14 +273,14 @@ export function ChartLineGastosCliente() {
         ) : (
           <ChartContainer
             config={chartConfig}
-            className="aspect-auto h-[220px] sm:h-[260px] w-full"
+            className="aspect-auto h-[240px] sm:h-[280px] w-full"
           >
             <LineChart
               accessibilityLayer
               data={chartData}
-              margin={{ left: 12, right: 12 }}
+              margin={{ left: 4, right: 12, top: 4, bottom: 0 }}
             >
-              <CartesianGrid vertical={false} />
+              <CartesianGrid vertical={false} strokeDasharray="3 3" />
               <XAxis
                 dataKey="date"
                 tickLine={false}
@@ -294,16 +294,34 @@ export function ChartLineGastosCliente() {
                   })
                 }
               />
+              <YAxis
+                tickLine={false}
+                axisLine={false}
+                tickMargin={4}
+                width={72}
+                tickFormatter={(value: number) =>
+                  value >= 1000
+                    ? `R$${(value / 1000).toFixed(1)}k`
+                    : `R$${value}`
+                }
+              />
               <ChartTooltip
+                cursor={{ stroke: "#94a3b8", strokeWidth: 1 }}
                 content={
                   <ChartTooltipContent
-                    className="w-[150px]"
+                    className="w-[170px]"
                     nameKey="gastos"
                     labelFormatter={(value) =>
                       new Date(value).toLocaleDateString("pt-BR", {
+                        day: "2-digit",
                         month: "short",
-                        day: "numeric",
                         year: "numeric",
+                      })
+                    }
+                    formatter={(value) =>
+                      Number(value).toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
                       })
                     }
                   />
@@ -312,9 +330,10 @@ export function ChartLineGastosCliente() {
               <Line
                 dataKey="gastos"
                 type="monotone"
-                stroke="#22c55e"
-                strokeWidth={2}
+                stroke="#dc2626"
+                strokeWidth={2.5}
                 dot={false}
+                activeDot={{ r: 5, fill: "#dc2626" }}
               />
             </LineChart>
           </ChartContainer>

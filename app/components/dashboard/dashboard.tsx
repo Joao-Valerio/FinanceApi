@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import type { ChartConfig } from "../ui/chart";
 import { AppLayout } from "../layout/AppLayout";
 import { api, ApiError } from "../../lib/api";
@@ -70,7 +70,7 @@ function formatarBRL(valor: number): string {
 }
 
 export function ChartAreaInteractive() {
-  const isMobile = useIsMobile();
+  useIsMobile();
   const [timeRange, setTimeRange] = useState<"7d" | "30d" | "90d">("90d");
   const [chartData, setChartData] = useState<ChartDataItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -142,44 +142,64 @@ export function ChartAreaInteractive() {
         ) : (
           <ChartContainer
             config={chartConfig}
-            className="aspect-auto h-[240px] w-full sm:h-[280px]"
+            className="aspect-auto h-[260px] w-full sm:h-[300px]"
           >
-            <AreaChart data={filteredData} className="w-full">
+            <AreaChart
+              data={filteredData}
+              margin={{ left: 4, right: 4, top: 4, bottom: 0 }}
+            >
               <defs>
                 <linearGradient id="fillEntradas" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#16a34a" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#16a34a" stopOpacity={0.1} />
+                  <stop offset="5%" stopColor="#16a34a" stopOpacity={0.5} />
+                  <stop offset="95%" stopColor="#16a34a" stopOpacity={0.05} />
                 </linearGradient>
                 <linearGradient id="fillSaidas" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#dc2626" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#dc2626" stopOpacity={0.1} />
+                  <stop offset="5%" stopColor="#dc2626" stopOpacity={0.5} />
+                  <stop offset="95%" stopColor="#dc2626" stopOpacity={0.05} />
                 </linearGradient>
               </defs>
-              <CartesianGrid vertical={false} />
+              <CartesianGrid vertical={false} strokeDasharray="3 3" />
               <XAxis
                 dataKey="date"
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
-                minTickGap={20}
+                minTickGap={24}
                 interval="preserveStartEnd"
-                tickFormatter={(value) => {
-                  const date = new Date(value);
-                  return date.toLocaleDateString("pt-BR", {
+                tickFormatter={(value) =>
+                  new Date(value).toLocaleDateString("pt-BR", {
                     month: "short",
                     day: "numeric",
-                  });
-                }}
+                  })
+                }
+              />
+              <YAxis
+                tickLine={false}
+                axisLine={false}
+                tickMargin={4}
+                width={72}
+                tickFormatter={(value: number) =>
+                  value >= 1000
+                    ? `R$${(value / 1000).toFixed(1)}k`
+                    : `R$${value}`
+                }
               />
               <ChartTooltip
-                cursor={false}
+                cursor={{ stroke: "#94a3b8", strokeWidth: 1 }}
                 content={
                   <ChartTooltipContent
-                    className="max-w-[160px] text-xs sm:max-w-[220px] sm:text-sm"
+                    className="max-w-[180px] text-xs sm:max-w-[240px] sm:text-sm"
                     labelFormatter={(value) =>
                       new Date(value).toLocaleDateString("pt-BR", {
+                        day: "2-digit",
                         month: "short",
-                        day: "numeric",
+                        year: "numeric",
+                      })
+                    }
+                    formatter={(value) =>
+                      Number(value).toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
                       })
                     }
                     indicator="dot"
@@ -188,24 +208,22 @@ export function ChartAreaInteractive() {
               />
               <Area
                 dataKey="Saídas"
-                type="natural"
+                type="monotone"
                 fill="url(#fillSaidas)"
                 stroke="#dc2626"
-                stackId="a"
+                strokeWidth={2}
               />
               <Area
                 dataKey="Entradas"
-                type="natural"
+                type="monotone"
                 fill="url(#fillEntradas)"
                 stroke="#16a34a"
-                stackId="a"
+                strokeWidth={2}
               />
               <ChartLegend content={<ChartLegendContent />} />
             </AreaChart>
           </ChartContainer>
         )}
-        {/* isMobile preservado para uso futuro quando os dados do back chegarem */}
-        <span className="sr-only">{isMobile ? "mobile" : "desktop"}</span>
       </CardContent>
     </Card>
   );

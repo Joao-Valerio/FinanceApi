@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { AppLayout } from "../layout/AppLayout";
 import {
   Card,
@@ -7,13 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-
-export type Usuario = {
-  id: string;
-  nome: string;
-  email: string;
-  createdAt: string;
-};
+import { useAuth } from "../../lib/auth";
+import { api, ApiError } from "../../lib/api";
 
 function getIniciais(nome: string): string {
   const partes = nome.trim().split(/\s+/).filter(Boolean);
@@ -31,29 +26,155 @@ function formatarData(iso: string | null): string {
   });
 }
 
-const Perfil = () => {
-  const usuario: Usuario | null = null;
+type Stats = {
+  totalTransacoes: number;
+  totalMetas: number;
+  totalCategorias: number;
+};
 
-  const totalTransacoes: number | null = null;
-  const totalMetas: number | null = null;
-  const totalCategorias: number | null = null;
+const Perfil = () => {
+  const { user, refresh } = useAuth();
+
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [carregandoStats, setCarregandoStats] = useState(true);
 
   const [editando, setEditando] = useState(false);
+  const [salvandoPerfil, setSalvandoPerfil] = useState(false);
+  const [erroPerfil, setErroPerfil] = useState<string | null>(null);
+  const [sucessoPerfil, setSucessoPerfil] = useState(false);
+
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+
   const [alterandoSenha, setAlterandoSenha] = useState(false);
+  const [salvandoSenha, setSalvandoSenha] = useState(false);
+  const [erroSenha, setErroSenha] = useState<string | null>(null);
+  const [sucessoSenha, setSucessoSenha] = useState(false);
 
-  const [nome, setNome] = useState(usuario?.nome ?? "");
-  const [email, setEmail] = useState(usuario?.email ?? "");
+  const [senhaAtual, setSenhaAtual] = useState("");
+  const [novaSenha, setNovaSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
 
-  const nomeExibicao = usuario?.nome ?? "Sem nome";
-  const emailExibicao = usuario?.email ?? "—";
+  useEffect(() => {
+    let cancelado = false;
+    Promise.all([
+      api<unknown[]>("/transacoes?limit=9999"),
+      api<unknown[]>("/metas"),
+      api<unknown[]>("/categorias"),
+    ])
+      .then(([transacoes, metas, categorias]) => {
+        if (cancelado) return;
+        setStats({
+          totalTransacoes: transacoes.length,
+          totalMetas: metas.length,
+          totalCategorias: categorias.length,
+        });
+      })
+      .catch(() => {
+        if (!cancelado) setStats(null);
+      })
+      .finally(() => {
+        if (!cancelado) setCarregandoStats(false);
+      });
+    return () => {
+      cancelado = true;
+    };
+  }, []);
+
+  function abrirEdicao() {
+    setNome(user?.nome ?? "");
+    setEmail(user?.email ?? "");
+    setErroPerfil(null);
+    setSucessoPerfil(false);
+    setEditando(true);
+  }
+
+  function cancelarEdicao() {
+    setEditando(false);
+    setErroPerfil(null);
+  }
+
+  async function handleSalvarPerfil(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setErroPerfil(null);
+    setSucessoPerfil(false);
+    setSalvandoPerfil(true);
+    try {
+      await api("/users/me", {
+        method: "PUT",
+        body: { nome, email },
+      });
+      await refresh();
+      setSucessoPerfil(true);
+      setEditando(false);
+    } catch (err) {
+      setErroPerfil(
+        err instanceof ApiError ? err.message : "Erro ao salvar alterações."
+      );
+    } finally {
+      setSalvandoPerfil(false);
+    }
+  }
+
+  function abrirAlterarSenha() {
+    setSenhaAtual("");
+    setNovaSenha("");
+    setConfirmarSenha("");
+    setErroSenha(null);
+    setSucessoSenha(false);
+    setAlterandoSenha(true);
+  }
+
+  function cancelarAlterarSenha() {
+    setAlterandoSenha(false);
+    setErroSenha(null);
+  }
+
+  async function handleAlterarSenha(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setErroSenha(null);
+    setSucessoSenha(false);
+
+    if (novaSenha.length < 6) {
+      setErroSenha("A nova senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
+    if (novaSenha !== confirmarSenha) {
+      setErroSenha("A confirmação não coincide com a nova senha.");
+      return;
+    }
+
+    setSalvandoSenha(true);
+    try {
+      await api("/users/me/senha", {
+        method: "PUT",
+        body: { senhaAtual, novaSenha },
+      });
+      setSucessoSenha(true);
+      setAlterandoSenha(false);
+      setSenhaAtual("");
+      setNovaSenha("");
+      setConfirmarSenha("");
+    } catch (err) {
+      setErroSenha(
+        err instanceof ApiError ? err.message : "Erro ao atualizar senha."
+      );
+    } finally {
+      setSalvandoSenha(false);
+    }
+  }
+
+  const nomeExibicao = user?.nome ?? "Sem nome";
+  const emailExibicao = user?.email ?? "—";
 
   return (
     <AppLayout>
       <main className="p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+        {/* Cabeçalho do perfil */}
         <section className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-6 rounded-2xl shadow-sm lg:col-span-3">
           <div className="flex flex-col sm:flex-row sm:items-center gap-5">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-green-600 text-white flex items-center justify-center text-3xl sm:text-4xl font-bold border-4 border-green-500 shrink-0">
-              {getIniciais(usuario?.nome ?? "")}
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-green-600 text-white flex items-center justify-center text-3xl sm:text-4xl font-bold border-4 border-green-500 shrink-0 select-none">
+              {user ? getIniciais(user.nome) : "?"}
             </div>
             <div className="min-w-0">
               <h1 className="text-2xl sm:text-3xl font-bold truncate">
@@ -63,23 +184,22 @@ const Perfil = () => {
                 {emailExibicao}
               </p>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                Conta criada em {formatarData(usuario?.createdAt ?? null)}
+                Conta criada em {formatarData(user?.createdAt ?? null)}
               </p>
             </div>
           </div>
         </section>
 
+        {/* Cards de estatísticas */}
         <section className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Card className="bg-gray-100 dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white">
             <CardHeader>
-              <CardTitle className="text-base sm:text-lg">
-                Transações
-              </CardTitle>
+              <CardTitle className="text-base sm:text-lg">Transações</CardTitle>
               <CardDescription>Total registradas na sua conta</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400">
-                {totalTransacoes ?? "—"}
+                {carregandoStats ? "..." : (stats?.totalTransacoes ?? "—")}
               </p>
             </CardContent>
           </Card>
@@ -91,33 +211,32 @@ const Perfil = () => {
             </CardHeader>
             <CardContent>
               <p className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400">
-                {totalMetas ?? "—"}
+                {carregandoStats ? "..." : (stats?.totalMetas ?? "—")}
               </p>
             </CardContent>
           </Card>
 
           <Card className="bg-gray-100 dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white">
             <CardHeader>
-              <CardTitle className="text-base sm:text-lg">
-                Categorias
-              </CardTitle>
+              <CardTitle className="text-base sm:text-lg">Categorias</CardTitle>
               <CardDescription>Cadastradas por você</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400">
-                {totalCategorias ?? "—"}
+                {carregandoStats ? "..." : (stats?.totalCategorias ?? "—")}
               </p>
             </CardContent>
           </Card>
         </section>
 
+        {/* Dados da conta */}
         <section className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-6 rounded-2xl shadow-sm lg:col-span-2 space-y-4">
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-lg sm:text-xl font-bold">Dados da conta</h2>
             {!editando && (
               <button
                 type="button"
-                onClick={() => setEditando(true)}
+                onClick={abrirEdicao}
                 className="px-4 py-2 text-sm font-semibold text-green-600 border-2 border-green-600 rounded-full hover:bg-green-600 hover:text-white transition"
               >
                 Editar
@@ -125,8 +244,14 @@ const Perfil = () => {
             )}
           </div>
 
+          {sucessoPerfil && (
+            <p className="px-3 py-2 rounded-md text-sm text-green-700 bg-green-100 dark:bg-green-900/30 dark:text-green-300 border border-green-300 dark:border-green-800">
+              Perfil atualizado com sucesso!
+            </p>
+          )}
+
           {editando ? (
-            <form className="space-y-3">
+            <form onSubmit={handleSalvarPerfil} className="space-y-3">
               <label className="block">
                 <span className="text-sm text-gray-600 dark:text-gray-300">
                   Nome
@@ -136,6 +261,8 @@ const Perfil = () => {
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
                   placeholder="Seu nome"
+                  required
+                  minLength={2}
                   className="mt-1 w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
               </label>
@@ -148,22 +275,35 @@ const Perfil = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="seu@email.com"
+                  required
                   className="mt-1 w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
               </label>
+
+              {erroPerfil && (
+                <p
+                  role="alert"
+                  className="px-3 py-2 rounded-md text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-300 border border-red-300 dark:border-red-800"
+                >
+                  {erroPerfil}
+                </p>
+              )}
+
               <div className="flex flex-col sm:flex-row gap-2 pt-2">
                 <button
                   type="button"
-                  onClick={() => setEditando(false)}
-                  className="px-6 py-2 border-2 border-green-600 text-green-600 bg-transparent rounded-xl hover:bg-green-600 hover:text-white transition font-semibold"
+                  onClick={cancelarEdicao}
+                  disabled={salvandoPerfil}
+                  className="px-6 py-2 border-2 border-green-600 text-green-600 bg-transparent rounded-xl hover:bg-green-600 hover:text-white transition font-semibold disabled:opacity-60"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition font-semibold"
+                  disabled={salvandoPerfil}
+                  className="px-6 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Salvar alterações
+                  {salvandoPerfil ? "Salvando..." : "Salvar alterações"}
                 </button>
               </div>
             </form>
@@ -186,48 +326,78 @@ const Perfil = () => {
                   Membro desde
                 </dt>
                 <dd className="font-semibold">
-                  {formatarData(usuario?.createdAt ?? null)}
+                  {formatarData(user?.createdAt ?? null)}
                 </dd>
               </div>
             </dl>
           )}
         </section>
 
+        {/* Segurança / Senha */}
         <section className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-6 rounded-2xl shadow-sm space-y-4">
           <h2 className="text-lg sm:text-xl font-bold">Segurança</h2>
+
+          {sucessoSenha && (
+            <p className="px-3 py-2 rounded-md text-sm text-green-700 bg-green-100 dark:bg-green-900/30 dark:text-green-300 border border-green-300 dark:border-green-800">
+              Senha atualizada com sucesso!
+            </p>
+          )}
+
           {alterandoSenha ? (
-            <form className="space-y-3">
+            <form onSubmit={handleAlterarSenha} className="space-y-3">
               <input
                 type="password"
                 placeholder="Senha atual"
                 aria-label="Senha atual"
+                value={senhaAtual}
+                onChange={(e) => setSenhaAtual(e.target.value)}
+                required
                 className="w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
               />
               <input
                 type="password"
-                placeholder="Nova senha"
+                placeholder="Nova senha (mín. 6 caracteres)"
                 aria-label="Nova senha"
+                value={novaSenha}
+                onChange={(e) => setNovaSenha(e.target.value)}
+                required
+                minLength={6}
                 className="w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
               />
               <input
                 type="password"
                 placeholder="Confirmar nova senha"
                 aria-label="Confirmar nova senha"
+                value={confirmarSenha}
+                onChange={(e) => setConfirmarSenha(e.target.value)}
+                required
                 className="w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
               />
+
+              {erroSenha && (
+                <p
+                  role="alert"
+                  className="px-3 py-2 rounded-md text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-300 border border-red-300 dark:border-red-800"
+                >
+                  {erroSenha}
+                </p>
+              )}
+
               <div className="flex flex-col sm:flex-row gap-2 pt-2">
                 <button
                   type="button"
-                  onClick={() => setAlterandoSenha(false)}
-                  className="px-6 py-2 border-2 border-green-600 text-green-600 bg-transparent rounded-xl hover:bg-green-600 hover:text-white transition font-semibold"
+                  onClick={cancelarAlterarSenha}
+                  disabled={salvandoSenha}
+                  className="px-6 py-2 border-2 border-green-600 text-green-600 bg-transparent rounded-xl hover:bg-green-600 hover:text-white transition font-semibold disabled:opacity-60"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition font-semibold"
+                  disabled={salvandoSenha}
+                  className="px-6 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Atualizar senha
+                  {salvandoSenha ? "Atualizando..." : "Atualizar senha"}
                 </button>
               </div>
             </form>
@@ -239,7 +409,7 @@ const Perfil = () => {
               </p>
               <button
                 type="button"
-                onClick={() => setAlterandoSenha(true)}
+                onClick={abrirAlterarSenha}
                 className="w-full bg-green-600 hover:bg-green-700 text-white p-2 rounded-xl font-semibold transition"
               >
                 Alterar senha
@@ -248,8 +418,11 @@ const Perfil = () => {
           )}
         </section>
 
-        <section className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-6 rounded-2xl shadow-sm lg:col-span-3">
-          <h2 className="text-lg sm:text-xl font-bold mb-2">Zona de perigo</h2>
+        {/* Zona de perigo */}
+        <section className="bg-gray-100 dark:bg-gray-900 border border-red-200 dark:border-red-900/40 text-gray-900 dark:text-white p-6 rounded-2xl shadow-sm lg:col-span-3">
+          <h2 className="text-lg sm:text-xl font-bold mb-2 text-red-600 dark:text-red-400">
+            Zona de perigo
+          </h2>
           <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
             Ao excluir sua conta, todas as suas transações, metas e categorias
             serão permanentemente removidas. Essa ação não pode ser desfeita.
