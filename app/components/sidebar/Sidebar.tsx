@@ -40,6 +40,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   return (
     <>
+      {/* Overlay — apenas no mobile */}
       {isOpen && (
         <button
           type="button"
@@ -50,22 +51,29 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       )}
 
       <aside
-        className={`fixed top-0 left-0 h-dvh w-72 max-w-[85vw]
-          bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800
-          p-6 shadow-xl z-30 transition-transform duration-300 ease-out
-          flex flex-col
-          ${isOpen ? "translate-x-0" : "-translate-x-full"}
-        `}
-        aria-hidden={!isOpen}
+        className={[
+          // Mobile: posição fixa como drawer
+          "fixed top-0 left-0 h-dvh z-30 shadow-xl transition-transform duration-300 ease-out",
+          // Desktop: sidebar estática e sempre visível
+          "md:static md:h-screen md:translate-x-0 md:z-auto md:shadow-none md:shrink-0",
+          // Largura
+          "w-64 max-w-[85vw] md:max-w-none",
+          // Visual
+          "bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800",
+          "p-5 flex flex-col",
+          // Estado mobile
+          isOpen ? "translate-x-0" : "-translate-x-full",
+        ].join(" ")}
       >
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-green-600 dark:text-green-400">
             FinançasApp
           </h2>
+          {/* Botão fechar — apenas no mobile */}
           <button
             type="button"
             onClick={onClose}
-            className="md:hidden text-2xl text-gray-700 dark:text-gray-200 hover:text-green-600 transition"
+            className="md:hidden text-2xl leading-none text-gray-700 dark:text-gray-200 hover:text-green-600 transition"
             aria-label="Fechar menu"
           >
             ×
@@ -81,13 +89,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                   <Link
                     to={item.to}
                     onClick={onClose}
-                    className={`block px-3 py-2 rounded-lg font-medium transition-colors
-                      ${
-                        isActive
-                          ? "bg-green-600 text-white shadow-md"
-                          : "text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40"
-                      }
-                    `}
+                    className={[
+                      "block px-3 py-2.5 rounded-lg font-medium transition-colors text-sm",
+                      isActive
+                        ? "bg-green-600 text-white shadow-sm"
+                        : "text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40",
+                    ].join(" ")}
                   >
                     {item.label}
                   </Link>
@@ -97,12 +104,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </ul>
         </nav>
 
-        <div className="pt-4 mt-4 border-t border-gray-300 dark:border-gray-700 space-y-4">
+        <div className="pt-4 mt-4 border-t border-gray-300 dark:border-gray-700 space-y-3">
           {user ? (
             <button
               type="button"
               onClick={handleLogout}
-              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 font-semibold transition"
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 font-semibold text-sm transition"
             >
               Sair
             </button>
@@ -110,7 +117,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             <Link
               to="/login"
               onClick={onClose}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 font-semibold transition"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 font-semibold text-sm transition"
             >
               Entrar
             </Link>
@@ -119,10 +126,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           <Link
             to="/perfil"
             onClick={onClose}
-            className="flex items-center gap-3 rounded-lg p-2 -m-2 hover:bg-green-100 dark:hover:bg-green-900/40 transition"
+            className="flex items-center gap-3 rounded-lg p-2 hover:bg-green-100 dark:hover:bg-green-900/40 transition"
             aria-label="Ir para meu perfil"
           >
-            <div className="w-10 h-10 rounded-full bg-green-600 text-white flex items-center justify-center font-bold border-2 border-green-500 shrink-0">
+            <div className="w-9 h-9 rounded-full bg-green-600 text-white flex items-center justify-center font-bold text-sm border-2 border-green-500 shrink-0">
               {getIniciais(user?.nome ?? "")}
             </div>
             <div className="min-w-0">

@@ -63,6 +63,7 @@ const Metas = () => {
   }, [user]);
 
   async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
     try {
       await api("/metas", {
         method: "POST",
@@ -123,7 +124,7 @@ const Metas = () => {
           <h2 className="text-lg sm:text-xl font-bold mb-2">Metas ativas</h2>
           {metas.length === 0 ? (
             <p className="text-sm text-gray-500 dark:text-gray-400 py-6 text-center">
-              Você ainda não criou nenhuma meta. Use o formulário ao lado para
+              Você ainda não criou nenhuma meta. Use o formulário abaixo para
               começar.
             </p>
           ) : (
@@ -161,22 +162,21 @@ const Metas = () => {
                       <div className="mt-3 flex gap-2">
                         <input
                           type="number"
-                          placeholder="Valor"
+                          placeholder="Valor (R$)"
                           value={depositos[meta.id] ?? ""}
                           onChange={(e) => {
                             const value = e.target.value;
-
                             setDepositos((prev) => ({
                               ...prev,
                               [meta.id]: value === "" ? 0 : Number(value),
                             }));
                           }}
-                          className="w-full p-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800"
+                          className="w-full px-3 py-2.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
                         />
-
                         <button
+                          type="button"
                           onClick={() => handleDepositar(meta.id)}
-                          className="bg-green-600 hover:bg-green-700 text-white px-3 rounded-lg"
+                          className="shrink-0 bg-green-600 hover:bg-green-700 text-white px-3 py-2.5 rounded-lg text-sm font-semibold transition"
                         >
                           Depositar
                         </button>
@@ -197,7 +197,8 @@ const Metas = () => {
               onChange={(e) => setTitulo(e.target.value)}
               type="text"
               placeholder="Nome da meta (ex: Reserva de emergência)"
-              className="w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+              className="w-full px-3 py-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <input
               value={objetivo}
@@ -206,7 +207,8 @@ const Metas = () => {
               min={0}
               step={0.01}
               placeholder="Valor objetivo (R$)"
-              className="w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+              className="w-full px-3 py-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <input
               value={prazo}
@@ -214,11 +216,11 @@ const Metas = () => {
               onChange={(e) => setPrazo(e.target.value)}
               type="month"
               aria-label="Prazo da meta"
-              className="w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full px-3 py-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-700 text-white p-2 rounded-xl font-semibold transition"
+              className="w-full bg-green-600 hover:bg-green-700 text-white px-3 py-3 rounded-xl font-semibold transition"
             >
               Salvar meta
             </button>

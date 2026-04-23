@@ -236,11 +236,11 @@ const Relatorios = () => {
           ) : (
             <ChartContainer
               config={chartConfig}
-              className="aspect-auto h-[240px] w-full"
+              className="aspect-auto h-[220px] sm:h-[280px] w-full"
             >
               <BarChart
                 data={categorias}
-                margin={{ left: 4, right: 8, top: 4, bottom: 0 }}
+                margin={{ left: 0, right: 8, top: 4, bottom: 0 }}
                 layout="vertical"
               >
                 <CartesianGrid horizontal={false} strokeDasharray="3 3" />
@@ -261,8 +261,8 @@ const Relatorios = () => {
                   tickLine={false}
                   axisLine={false}
                   tickMargin={4}
-                  width={96}
-                  tick={{ fontSize: 12 }}
+                  width={80}
+                  tick={{ fontSize: 11 }}
                 />
                 <ChartTooltip
                   cursor={{ fill: "rgba(148,163,184,0.1)" }}

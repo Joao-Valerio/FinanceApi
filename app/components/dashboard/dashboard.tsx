@@ -51,17 +51,6 @@ const chartConfig = {
   Saídas: { label: "Saídas", color: "#dc2626" },
 } satisfies ChartConfig;
 
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 640);
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-  return isMobile;
-}
-
 function formatarBRL(valor: number): string {
   return valor.toLocaleString("pt-BR", {
     style: "currency",
@@ -70,7 +59,6 @@ function formatarBRL(valor: number): string {
 }
 
 export function ChartAreaInteractive() {
-  useIsMobile();
   const [timeRange, setTimeRange] = useState<"7d" | "30d" | "90d">("90d");
   const [chartData, setChartData] = useState<ChartDataItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -314,7 +302,7 @@ export const Dashboard: React.FC = () => {
               value={descricao}
               onChange={(e) => setDescricao(e.target.value)}
               required
-              className="w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full px-3 py-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <input
               type="number"
@@ -324,12 +312,12 @@ export const Dashboard: React.FC = () => {
               value={valor}
               onChange={(e) => setValor(e.target.value)}
               required
-              className="w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full px-3 py-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <select
               value={tipo}
               onChange={(e) => setTipo(e.target.value as "ENTRADA" | "SAIDA")}
-              className="sm:col-span-2 w-full p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="sm:col-span-2 w-full px-3 py-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
               aria-label="Tipo de transação"
             >
               <option value="ENTRADA">Entrada</option>
@@ -346,7 +334,7 @@ export const Dashboard: React.FC = () => {
             <button
               type="submit"
               disabled={salvando}
-              className="sm:col-span-2 w-full bg-green-600 hover:bg-green-700 text-white p-2 rounded-xl font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed"
+              className="sm:col-span-2 w-full bg-green-600 hover:bg-green-700 text-white px-3 py-3 rounded-xl font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {salvando ? "Salvando..." : "Adicionar"}
             </button>
@@ -368,14 +356,15 @@ export const Dashboard: React.FC = () => {
           ) : (
             <ul className="divide-y divide-gray-200 dark:divide-gray-700">
               {transacoes.map((t) => (
-                <li key={t.id} className="flex justify-between py-2">
-                  <span>{t.descricao}</span>
+                <li key={t.id} className="flex justify-between items-center gap-3 py-2">
+                  <span className="min-w-0 truncate text-sm">{t.descricao}</span>
                   <span
-                    className={
+                    className={[
+                      "shrink-0 text-sm font-medium",
                       t.tipo === "ENTRADA"
                         ? "text-green-600 dark:text-green-400"
-                        : "text-red-500"
-                    }
+                        : "text-red-500",
+                    ].join(" ")}
                   >
                     {t.tipo === "ENTRADA" ? "+ " : "- "}
                     {formatarBRL(t.valor)}

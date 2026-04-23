@@ -61,7 +61,7 @@ export const ContactForm: React.FC = () => {
       )}
       <button
         type="submit"
-        className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-xl transition"
+        className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-xl transition"
       >
         Enviar mensagem
       </button>
