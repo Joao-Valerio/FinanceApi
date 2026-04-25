@@ -40,28 +40,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Overlay — apenas no mobile */}
       {isOpen && (
         <button
           type="button"
           aria-label="Fechar menu"
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-20 md:hidden"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-20"
           onClick={onClose}
         />
       )}
 
       <aside
         className={[
-          // Mobile: posição fixa como drawer
-          "fixed top-0 left-0 h-dvh z-30 shadow-xl transition-transform duration-300 ease-out",
-          // Desktop: sidebar estática e sempre visível
-          "md:static md:h-screen md:translate-x-0 md:z-auto md:shadow-none md:shrink-0",
-          // Largura
-          "w-64 max-w-[85vw] md:max-w-none",
-          // Visual
+          "fixed top-0 left-0 h-dvh z-30 w-64 max-w-[85vw] shadow-xl transition-transform duration-300 ease-out",
           "bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800",
           "p-5 flex flex-col",
-          // Estado mobile
           isOpen ? "translate-x-0" : "-translate-x-full",
         ].join(" ")}
       >
@@ -69,11 +61,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           <h2 className="text-xl font-bold text-green-600 dark:text-green-400">
             FinançasApp
           </h2>
-          {/* Botão fechar — apenas no mobile */}
           <button
             type="button"
             onClick={onClose}
-            className="md:hidden text-2xl leading-none text-gray-700 dark:text-gray-200 hover:text-green-600 transition"
+            className="text-2xl leading-none text-gray-700 dark:text-gray-200 hover:text-green-600 transition"
             aria-label="Fechar menu"
           >
             ×
@@ -93,7 +84,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                       "block px-3 py-2.5 rounded-lg font-medium transition-colors text-sm",
                       isActive
                         ? "bg-green-600 text-white shadow-sm"
-                        : "text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40",
+                        : "text-gray-700 dark:text-gray-200 hover:bg-green-300 dark:hover:bg-green-900/40",
                     ].join(" ")}
                   >
                     {item.label}
