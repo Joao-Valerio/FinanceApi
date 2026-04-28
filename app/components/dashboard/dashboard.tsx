@@ -40,6 +40,11 @@ export type Transacao = {
   data: string;
 };
 
+type Categoria = {
+  id: string;
+  nome: string;
+};
+
 type SaldoResponse = {
   saldoAtual: number;
   totalEntradas: number;
@@ -220,8 +225,9 @@ export function ChartAreaInteractive() {
 export const Dashboard: React.FC = () => {
   const [saldo, setSaldo] = useState<number | null>(null);
   const [transacoes, setTransacoes] = useState<Transacao[]>([]);
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [carregando, setCarregando] = useState(true);
-
+  const [categoria, setCategoria] = useState("");
   const [descricao, setDescricao] = useState("");
   const [valor, setValor] = useState("");
   const [tipo, setTipo] = useState<"ENTRADA" | "SAIDA">("ENTRADA");
@@ -231,15 +237,18 @@ export const Dashboard: React.FC = () => {
   async function carregarTudo() {
     setCarregando(true);
     try {
-      const [saldoResp, listaResp] = await Promise.all([
+      const [saldoResp, listaResp, categoriasResp] = await Promise.all([
         api<SaldoResponse>("/relatorios/saldo"),
         api<Transacao[]>("/transacoes?limit=10"),
+        api<Categoria[]>("/categorias"),
       ]);
       setSaldo(saldoResp.saldoAtual);
       setTransacoes(listaResp);
+      setCategorias(categoriasResp);
     } catch {
       setSaldo(null);
       setTransacoes([]);
+      setCategorias([]);
     } finally {
       setCarregando(false);
     }
@@ -252,6 +261,11 @@ export const Dashboard: React.FC = () => {
   async function handleAdicionar(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setErro(null);
+    if (tipo === "SAIDA" && !categoria) {
+      setErro("Selecione uma categoria para saídas.");
+      return;
+    }
+
     setSalvando(true);
     try {
       await api<Transacao>("/transacoes", {
@@ -261,11 +275,13 @@ export const Dashboard: React.FC = () => {
           valor: Number(valor),
           tipo,
           data: new Date().toISOString(),
+          categoriaId: categoria || undefined,
         },
       });
       setDescricao("");
       setValor("");
       setTipo("ENTRADA");
+      setCategoria("");
       await carregarTudo();
     } catch (err) {
       setErro(
@@ -322,6 +338,24 @@ export const Dashboard: React.FC = () => {
             >
               <option value="ENTRADA">Entrada</option>
               <option value="SAIDA">Saída</option>
+            </select>
+            <select
+              value={categoria}
+              onChange={(e) => setCategoria(e.target.value)}
+              required={tipo === "SAIDA"}
+              className="sm:col-span-2 w-full px-3 py-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              aria-label="Categoria da transação"
+            >
+              <option value="" disabled>
+                {categorias.length === 0
+                  ? "Nenhuma categoria disponível"
+                  : "Selecione a categoria"}
+              </option>
+              {categorias.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.nome}
+                </option>
+              ))}
             </select>
             {erro && (
               <p
