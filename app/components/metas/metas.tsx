@@ -30,13 +30,19 @@ function formatarBRL(valor: number): string {
   });
 }
 
+function formatarPrazo(prazo: string): string {
+  const [year, month] = prazo.split('-');
+  const date = new Date(parseInt(year), parseInt(month) - 1);
+  return date.toLocaleDateString('pt-BR', { year: 'numeric', month: 'long' });
+}
+
 
 const Metas = () => {
   const [metas, setMetas] = useState<Meta[]>([]);
   const [carregando, setCarregando] = useState(true);
   const { user } = useAuth();
   const [titulo, setTitulo] = useState("");
-  const [objetivo, setObjetivo] = useState(0);
+  const [objetivo, setObjetivo] = useState("");
   const [prazo, setPrazo] = useState("");
   const [depositos, setDepositos] = useState<Record<string, number>>({});
 
@@ -69,7 +75,7 @@ const Metas = () => {
         method: "POST",
         body: {
           titulo,
-          objetivo,
+          objetivo: Number(objetivo) || 0,
           prazo,
         },
       });
@@ -77,7 +83,7 @@ const Metas = () => {
       fetchMetas();
 
       setTitulo("");
-      setObjetivo(0);
+      setObjetivo("");
       setPrazo("");
     } catch (err) {
       console.error(err);
@@ -136,14 +142,14 @@ const Metas = () => {
                     key={meta.id}
                     className="bg-white dark:bg-gray-950 border-gray-200 dark:border-gray-800"
                   >
-                    <CardHeader>
-                      <CardTitle className="text-base sm:text-lg">
+                    <CardHeader >
+                      <CardTitle className="text-base sm:text-lg text-black dark:text-white">
                         {meta.titulo}
                       </CardTitle>
                       <CardDescription>Prazo: {meta.prazo}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-2">
-                      <p className="text-sm">
+                      <p className="text-sm text-black dark:text-white">
                         Guardado:{" "}
                         <span className="font-semibold text-green-600 dark:text-green-400">
                           {formatarBRL(meta.atual)}
@@ -202,7 +208,7 @@ const Metas = () => {
             />
             <input
               value={objetivo}
-              onChange={(e) => setObjetivo(Number(e.target.value))}
+              onChange={(e) => setObjetivo(e.target.value)}
               type="number"
               min={0}
               step={0.01}
