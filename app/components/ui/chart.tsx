@@ -147,6 +147,14 @@ function ChartTooltipContent({
       )
     }
 
+    const payloadCategory = item?.payload
+      ? (item.payload as Record<string, unknown>).categoria
+      : undefined
+
+    if (payloadCategory && typeof payloadCategory === "string") {
+      return <div className={cn("font-medium", labelClassName)}>{payloadCategory}</div>
+    }
+
     if (!value) {
       return null
     }
@@ -171,7 +179,7 @@ function ChartTooltipContent({
   return (
     <div
       className={cn(
-        "border-border/50 bg-background grid min-w-[8rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl",
+        "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white grid min-w-[8rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl",
         className
       )}
     >
@@ -193,7 +201,14 @@ function ChartTooltipContent({
                 )}
               >
                 {formatter && item?.value !== undefined && item.name ? (
-                  formatter(item.value, item.name, item, index, item.payload)
+                  <div className="flex w-full justify-between gap-2">
+                    <span className="text-muted-foreground">
+                      {itemConfig?.label || item.name}
+                    </span>
+                    <span className="text-foreground font-mono font-medium tabular-nums">
+                      {formatter(item.value, item.name, item, index, item.payload)}
+                    </span>
+                  </div>
                 ) : (
                   <>
                     {itemConfig?.icon ? (
@@ -232,7 +247,7 @@ function ChartTooltipContent({
                           {itemConfig?.label || item.name}
                         </span>
                       </div>
-                      {item.value && (
+                      {item.value !== undefined && (
                         <span className="text-foreground font-mono font-medium tabular-nums">
                           {item.value.toLocaleString()}
                         </span>

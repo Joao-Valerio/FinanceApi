@@ -268,7 +268,7 @@ const Relatorios = () => {
                   cursor={{ fill: "rgba(148,163,184,0.1)" }}
                   content={
                     <ChartTooltipContent
-                      className="w-[180px]"
+                      className="w-[180px] "
                       formatter={(value) =>
                         Number(value).toLocaleString("pt-BR", {
                           style: "currency",
