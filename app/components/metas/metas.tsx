@@ -146,7 +146,7 @@ const Metas = () => {
                       <CardTitle className="text-base sm:text-lg text-black dark:text-white">
                         {meta.titulo}
                       </CardTitle>
-                      <CardDescription>Prazo: {meta.prazo}</CardDescription>
+                      <CardDescription>Prazo: {formatarPrazo(meta.prazo)}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-2">
                       <p className="text-sm text-black dark:text-white">
