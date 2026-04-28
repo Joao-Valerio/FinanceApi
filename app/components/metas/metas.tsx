@@ -222,7 +222,9 @@ const Metas = () => {
               onChange={(e) => setPrazo(e.target.value)}
               type="month"
               aria-label="Prazo da meta"
-              className="w-full px-3 py-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full px-3 py-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 
+  dark:[&::-webkit-calendar-picker-indicator]:invert 
+  [&::-webkit-calendar-picker-indicator]:opacity-50"
             />
             <button
               type="submit"
