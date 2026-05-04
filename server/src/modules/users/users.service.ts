@@ -27,3 +27,12 @@ export async function alterarSenha(userId: string, data: AlterarSenhaInput) {
   const senhaHash = await hashSenha(data.novaSenha);
   await prisma.user.update({ where: { id: userId }, data: { senhaHash } });
 }
+
+export async function obterEstatisticasPerfil(userId: string) {
+  const [totalTransacoes, totalMetas, totalCategorias] = await Promise.all([
+    prisma.transacao.count({ where: { userId } }),
+    prisma.meta.count({ where: { userId } }),
+    prisma.categoria.count({ where: { userId } }),
+  ]);
+  return { totalTransacoes, totalMetas, totalCategorias };
+}

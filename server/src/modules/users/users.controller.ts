@@ -21,3 +21,7 @@ export async function alterarSenha(req: Request, res: Response) {
   await service.alterarSenha(getUserId(req), body);
   res.status(204).send();
 }
+
+export async function obterEstatisticasPerfil(req: Request, res: Response) {
+  res.json(await service.obterEstatisticasPerfil(getUserId(req)));
+}
