@@ -33,7 +33,7 @@ type Stats = {
 };
 
 const Perfil = () => {
-  const { user, refresh } = useAuth();
+  const { user, refresh, loading: authCarregando } = useAuth();
 
   const [stats, setStats] = useState<Stats | null>(null);
   const [carregandoStats, setCarregandoStats] = useState(true);
@@ -56,19 +56,19 @@ const Perfil = () => {
   const [confirmarSenha, setConfirmarSenha] = useState("");
 
   useEffect(() => {
+    if (authCarregando) return;
+
+    if (!user) {
+      setStats(null);
+      setCarregandoStats(false);
+      return;
+    }
+
     let cancelado = false;
-    Promise.all([
-      api<unknown[]>("/transacoes?limit=9999"),
-      api<unknown[]>("/metas"),
-      api<unknown[]>("/categorias"),
-    ])
-      .then(([transacoes, metas, categorias]) => {
-        if (cancelado) return;
-        setStats({
-          totalTransacoes: transacoes.length,
-          totalMetas: metas.length,
-          totalCategorias: categorias.length,
-        });
+    setCarregandoStats(true);
+    api<Stats>("/users/me/estatisticas")
+      .then((data) => {
+        if (!cancelado) setStats(data);
       })
       .catch(() => {
         if (!cancelado) setStats(null);
@@ -79,7 +79,7 @@ const Perfil = () => {
     return () => {
       cancelado = true;
     };
-  }, []);
+  }, [user, authCarregando]);
 
   function abrirEdicao() {
     setNome(user?.nome ?? "");
