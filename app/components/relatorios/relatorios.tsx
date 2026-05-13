@@ -265,7 +265,11 @@ const Relatorios = () => {
                   tick={{ fontSize: 11 }}
                 />
                 <ChartTooltip
-                  cursor={{ fill: "rgba(148,163,184,0.1)" }}
+                  cursor={{
+                    fill: "rgba(148, 163, 184, 0.12)",
+                    stroke: "none",
+                    strokeWidth: 0,
+                  }}
                   content={
                     <ChartTooltipContent
                       className="w-[180px] "
@@ -278,7 +282,12 @@ const Relatorios = () => {
                     />
                   }
                 />
-                <Bar dataKey="total" radius={[0, 4, 4, 0]}>
+                <Bar
+                  dataKey="total"
+                  radius={[0, 4, 4, 0]}
+                  stroke="none"
+                  strokeWidth={0}
+                >
                   {categorias.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.cor} />
                   ))}

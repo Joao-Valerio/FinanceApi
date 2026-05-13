@@ -95,7 +95,7 @@ export function ChartAreaInteractive() {
   };
 
   return (
-    <Card className="pt-0 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+    <Card className="pt-0 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white">
       <CardHeader className="flex flex-col sm:flex-row sm:items-center gap-2 space-y-0 border-b py-5">
         <div className="grid flex-1 gap-1">
           <CardTitle>Entradas x Saídas</CardTitle>
